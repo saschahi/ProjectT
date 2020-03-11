@@ -52,12 +52,11 @@ namespace ProjectT
 
             Client.Connect();
 
-
             AutoResetEvent eventHandler = new AutoResetEvent(false);
 
 
             wait: eventHandler.WaitOne(250);
-            Thread.Sleep(250);
+
             if (ThreadWorker.stayConnected == false && Client.IsConnected)
             {
                 Client.Disconnect();
