@@ -22,13 +22,13 @@ namespace ProjectT
         {
             BroadcastHandler.setupHandler();
             Authdata = TwitchConfigs.GetAuthdata();
-            
+
             var clientOptions = new ClientOptions
             {
                 MessagesAllowedInPeriod = 750,
                 ThrottlingPeriod = TimeSpan.FromSeconds(30)
             };
-            
+
             WebSocketClient customClient = new WebSocketClient(clientOptions);
 
             if (Client == null)
@@ -53,35 +53,35 @@ namespace ProjectT
             Client.Connect();
 
 
-            //AutoResetEvent eventHandler = new AutoResetEvent(false);
+            AutoResetEvent eventHandler = new AutoResetEvent(false);
 
-            while (ThreadWorker.runThread)
+
+            wait: eventHandler.WaitOne(250);
+            Thread.Sleep(250);
+            if (ThreadWorker.stayConnected == false && Client.IsConnected)
             {
-                //eventHandler.WaitOne(250);
-                Thread.Sleep(250);
-                if (ThreadWorker.stayConnected == false && Client.IsConnected)
-                {
-                    Client.Disconnect();
-                }
-                else if (ThreadWorker.stayConnected == true && !Client.IsConnected)
-                {
-                    Client.Connect();
-                }
-
-                if (ThreadWorker.sendDebugMSG)
-                {
-                    ThreadWorker.sendDebugMSG = false;
-                    Client.SendMessage(Client.JoinedChannels.First(), "This is a test message");
-                }
-
-                if (MessageQueue.messageQueue.Count > 0)
-                {
-                    MessageQueue.messageQueue.TryDequeue(out string messageToSend);
-                    TwitchConfigs.LogDebug("trying to send message " + messageToSend);
-                    //Client.SendMessage(Client.GetJoinedChannel(Authdata.broadcastername), messageToSend);
-                    Client.SendMessage(Client.JoinedChannels.First(), messageToSend);
-                }
+                Client.Disconnect();
             }
+            else if (ThreadWorker.stayConnected == true && !Client.IsConnected)
+            {
+                Client.Connect();
+            }
+
+            if (ThreadWorker.sendDebugMSG)
+            {
+                ThreadWorker.sendDebugMSG = false;
+                Client.SendMessage(Client.JoinedChannels.First(), "This is a test message");
+            }
+
+            if (MessageQueue.messageQueue.Count > 0)
+            {
+                MessageQueue.messageQueue.TryDequeue(out string messageToSend);
+                TwitchConfigs.LogDebug("trying to send message " + messageToSend);
+                //Client.SendMessage(Client.GetJoinedChannel(Authdata.broadcastername), messageToSend);
+                Client.SendMessage(Client.JoinedChannels.First(), messageToSend);
+            }
+            if (ThreadWorker.runThread)
+                goto wait;
             TwitchConfigs.LogDebug("Thread is ending");
         }
 
