@@ -1,0 +1,4 @@
+displayName = Project T
+author = Saschahi
+version = 0.0.6
+dllReferences = TwitchLib.Client, TwitchLib.Client.Enums, TwitchLib.Client.Models, TwitchLib.Communication
