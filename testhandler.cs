@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjectT
 {
-    class testhandler : ChatHandler
+    class testhandler : TwitchHandler
     {
-        public override void MessageHandler(Viewer viewer, string message)
+        public override void MessageHandler(Viewer viewer, string message, int bits)
         {
             TwitchConfigs.LogDebug("Overwrittenhandler got message");
         }

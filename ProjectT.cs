@@ -22,7 +22,7 @@ namespace ProjectT
 		public override void Load()
 		{
 			TwitchConfigs.Load();
-			TwitchConfigs.LogDebug("Loading the Mod V2");
+			TwitchConfigs.LogDebug("Loading the Mod");
 			AllViewers = TwitchConfigs.getListConfig();
 		}
 		public override void Unload()
@@ -60,8 +60,21 @@ namespace ProjectT
 				}
 			}
 			return AddNewUser(name);
-
 		}
+
+		public static bool doesViewerExist(string name)
+		{
+			foreach(var item in AllViewers)
+			{
+				if(item.Name == name)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public static Viewer AddNewUser(string name)
         {
             Viewer newguy = new Viewer();
@@ -71,6 +84,29 @@ namespace ProjectT
 			AllViewers.Add(newguy);
             return newguy;
         }
+
+		public static void AddCoins(Viewer viewer, double coinstoadd)
+		{
+			int index = AllViewers.IndexOf(viewer);
+			AllViewers[index].Coins = AllViewers[index].Coins + coinstoadd;
+			TwitchConfigs.SaveListConfig(AllViewers);
+		}
+
+		public static bool RemoveCoins(Viewer viewer, double coinstoremove)
+		{
+			int index = AllViewers.IndexOf(viewer);
+
+			if (AllViewers[index].Coins >= coinstoremove)
+			{
+				AllViewers[index].Coins = AllViewers[index].Coins - coinstoremove;
+				TwitchConfigs.SaveListConfig(AllViewers);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
 		public void debugginglog(string message)
 		{

@@ -27,6 +27,8 @@ namespace ProjectT
         static Preferences ListConfig = new Preferences(Userconfigpath);
         static Preferences DebugConfig = new Preferences(Debuglog);
 
+        public static ProjectTconfig Karl = new ProjectTconfig();
+
         public static void Load()
         {
             //Reading the config file
@@ -168,11 +170,18 @@ namespace ProjectT
 
         public static void LogDebug(string text)
         {
-            string jetzt = Convert.ToString(DateTime.Now);
-            jetzt = jetzt + " ";
-            StreamWriter test = File.AppendText(Debuglog);
-            test.WriteLine(jetzt + text);
-            test.Close();
+            if (Karl == null)
+            {
+                Karl = ModContent.GetInstance<ProjectTconfig>();
+            }
+            if (Karl.EnableDebug)
+            {
+                string jetzt = Convert.ToString(DateTime.Now);
+                jetzt = jetzt + " ";
+                StreamWriter test = File.AppendText(Debuglog);
+                test.WriteLine(jetzt + text);
+                test.Close();
+            }
         }
     }
 }

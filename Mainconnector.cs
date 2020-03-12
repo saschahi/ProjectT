@@ -10,6 +10,7 @@ using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Models;
 using System.Linq;
+using TwitchLib.Client.Events;
 
 namespace ProjectT
 {
@@ -47,11 +48,19 @@ namespace ProjectT
             Client.OnError += OnError;
             Client.OnConnectionError += OnConnectionError;
             Client.OnWhisperReceived += OnWhisperReceived;
-            Client.OnChatCommandReceived += OnChatCommandReceived;
+            Client.OnBeingHosted += OnBeingHosted;
+            Client.OnCommunitySubscription += OnCommunitySubscription;
+            Client.OnGiftedSubscription += OnGiftedSubscription;
+            Client.OnIncorrectLogin += OnIncorrectLogin;
+            Client.OnNewSubscriber += OnNewSubscriber;
+            Client.OnNoPermissionError += OnNoPermissionError;
+            Client.OnReSubscriber += OnReSubscriber;
+            Client.OnRitualNewChatter += OnRitualNewChatter;
+            Client.OnVIPsReceived += OnVIPsReceived;
 
 
             Client.Connect();
-
+            
             AutoResetEvent eventHandler = new AutoResetEvent(false);
 
 
@@ -76,7 +85,6 @@ namespace ProjectT
             {
                 MessageQueue.messageQueue.TryDequeue(out string messageToSend);
                 TwitchConfigs.LogDebug("trying to send message " + messageToSend);
-                //Client.SendMessage(Client.GetJoinedChannel(Authdata.broadcastername), messageToSend);
                 Client.SendMessage(Client.JoinedChannels.First(), messageToSend);
             }
             if (ThreadWorker.runThread)
@@ -84,7 +92,52 @@ namespace ProjectT
             TwitchConfigs.LogDebug("Thread is ending");
         }
 
-        private void OnConnected(object sender, TwitchLib.Client.Events.OnConnectedArgs e)
+        private void OnVIPsReceived(object sender, OnVIPsReceivedArgs e)
+        {
+            TwitchConfigs.LogDebug("VIPs Received");
+        }
+
+        private void OnRitualNewChatter(object sender, OnRitualNewChatterArgs e)
+        {
+            TwitchConfigs.LogDebug("New Chatter: " + e.RitualNewChatter.DisplayName);
+        }
+
+        private void OnReSubscriber(object sender, OnReSubscriberArgs e)
+        {
+            TwitchConfigs.LogDebug("Got a Resubscriber: " + e.ReSubscriber.DisplayName + ", Subscription Plan: " + e.ReSubscriber.SubscriptionPlanName);
+        }
+
+        private void OnNoPermissionError(object sender, EventArgs e)
+        {
+            TwitchConfigs.LogDebug("Permission error! " + e.ToString());
+        }
+
+        private void OnNewSubscriber(object sender, OnNewSubscriberArgs e)
+        {
+            TwitchConfigs.LogDebug("New Subscriber: " + e.Subscriber.DisplayName);
+        }
+
+        private void OnIncorrectLogin(object sender, OnIncorrectLoginArgs e)
+        {
+            TwitchConfigs.LogDebug("INCORRECT LOGIN ERROR - Pls check the setup file. thx");
+        }
+
+        private void OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
+        {
+            TwitchConfigs.LogDebug("Got Gifted Subscription: " + e.GiftedSubscription.DisplayName);
+        }
+
+        private void OnCommunitySubscription(object sender, OnCommunitySubscriptionArgs e)
+        {
+            TwitchConfigs.LogDebug("Got Community Subscription: " + e.GiftedSubscription.DisplayName);
+        }
+
+        private void OnBeingHosted(object sender, OnBeingHostedArgs e)
+        {
+            TwitchConfigs.LogDebug("Being hostet by " + e.BeingHostedNotification.HostedByChannel + " with " + e.BeingHostedNotification.Viewers + " Viewers. Autohost: " + e.BeingHostedNotification.IsAutoHosted);
+        }
+
+        private void OnConnected(object sender, OnConnectedArgs e)
         {
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} succesfully connected to Twitch.");
 
@@ -92,28 +145,20 @@ namespace ProjectT
                 TwitchConfigs.LogDebug($"The bot will now attempt to automatically join the channel provided when the Initialize method was called: {e.AutoJoinChannel}");
         }
 
-        private void OnJoinedChannel(object sender, TwitchLib.Client.Events.OnJoinedChannelArgs e)
+        private void OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} just joined the channel: {e.Channel}");
-            //Client.SendMessage(e.Channel, "TProject Succesfully started");
             MessageQueue.messageQueue.Enqueue("TProject Succesfully started");
         }
 
-        private void OnMessageReceived(object sender, TwitchLib.Client.Events.OnMessageReceivedArgs e)
+        private void OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            BaseMessageHandler(ProjectT.getViewerFromString(e.ChatMessage.Username), e.ChatMessage.Message);
             
-            /*
-            List<TwitchInterfaceBase> receivers = Current.Game.components.OfType<TwitchInterfaceBase>().ToList();
-            
-            foreach (TwitchInterfaceBase receiver in receivers)
-            {
-                receiver.ParseCommand(e.ChatMessage);
-            }
-            */
+            TwitchConfigs.LogDebug("Received Message: " + e.ChatMessage.Username + ": " + e.ChatMessage.Message);
+            BaseMessageHandler(ProjectT.getViewerFromString(e.ChatMessage.Username), e.ChatMessage.Message, e.ChatMessage.Bits);
         }
 
-        private void OnLeftChannel(object sender, TwitchLib.Client.Events.OnLeftChannelArgs e)
+        private void OnLeftChannel(object sender, OnLeftChannelArgs e)
         {
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} just left the channel: {e.Channel}");
         }
@@ -123,20 +168,16 @@ namespace ProjectT
             TwitchConfigs.LogDebug($"The bot had an error: {e.Exception.Message}");
         }
 
-        private void OnConnectionError(object sender, TwitchLib.Client.Events.OnConnectionErrorArgs e)
+        private void OnConnectionError(object sender, OnConnectionErrorArgs e)
         {
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} had a connection error: {e.Error.Message}");
         }
 
-        private void OnWhisperReceived(object sender, TwitchLib.Client.Events.OnWhisperReceivedArgs e)
+        private void OnWhisperReceived(object sender, OnWhisperReceivedArgs e)
         {
             TwitchConfigs.LogDebug($"The bot got a whisper: {e.WhisperMessage.Message}");
         }
 
-        private void OnChatCommandReceived(object sender, TwitchLib.Client.Events.OnChatCommandReceivedArgs e)
-        {
-            BaseMessageHandler(ProjectT.getViewerFromString(e.Command.ChatMessage.Username), e.Command.ChatMessage.Message);
-        }
 
 
 
@@ -165,8 +206,7 @@ namespace ProjectT
 
 
 
-
-        private static void BaseMessageHandler(Viewer viewer, string message)
+        private static void BaseMessageHandler(Viewer viewer, string message, int bits)
         {
             //shameless plug
             if (viewer.Name.Equals("saschahi"))
@@ -183,25 +223,28 @@ namespace ProjectT
             {
                 if (message.StartsWith("!givecoins"))
                 {
+                    string v1 = message.Remove(0, 11);
+                    string v2 = new string(v1.TakeWhile(char.IsLetterOrDigit).ToArray());
+                    string v3 = v1.Remove(0, v2.Length + 1);
+                    string v4 = new string(v3.TakeWhile(char.IsDigit).ToArray());
+                    if (v2 != null && v4 != null)
+                    {
+                        if (ProjectT.doesViewerExist(v2))
+                        {
+                            ProjectT.AddCoins(ProjectT.getViewerFromString(v2), Convert.ToDouble(v4));
+                            MessageQueue.messageQueue.Enqueue("Added " + v4 + " coins to " + v2 + "s account");
+                            return;
+                        }
+                    }
                     
+                    return;
                 }
             }
 
-            /*
-            //Twitch Mods (not 100% sync but whatevs)
-            if (OnlineMods.Contains(viewer.Name))
-            {
-                if (message.Contains("!iamamod"))
-                {
-                    irc.SendPublicChatMessage(viewer.Name + " yes you are");
-                    return;
-                }
-            }*/
-
             // All "normal" commands
-            if (message.Equals("!hello"))
+            if (message.Equals("!info"))
             {
-                MessageQueue.messageQueue.Enqueue("Hello World!");
+                MessageQueue.messageQueue.Enqueue("Project-T Made by Saschahi. find more info here: https://discord.gg/9dauEnQ");
                 return;
             }
             else if (message.Equals("!bal"))
@@ -211,7 +254,7 @@ namespace ProjectT
             }
             //if nothing is correct give it to other mods
 
-            BroadcastHandler.BroadcastTwitchMessage(viewer, message);
+            BroadcastHandler.BroadcastTwitchMessage(viewer, message, bits);
         }
         
         /*

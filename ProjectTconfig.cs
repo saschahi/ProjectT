@@ -21,7 +21,7 @@ namespace ProjectT
 
         public override void OnChanged()
         {
-            //Mainconnector.Karl = ModContent.GetInstance<ProjectTconfig>();
+            TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
         }
     }
 }
