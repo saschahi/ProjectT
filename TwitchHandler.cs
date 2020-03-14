@@ -32,5 +32,7 @@ namespace ProjectT
         public virtual void onCommunitySubscription(Viewer viewer) { }
 
         public virtual void onBeingHosted(Viewer Host, int Menge) { }
+
+        public virtual void onViewerListUpdate(List<Viewer> ListOfAllViewers) { }
     }
 }

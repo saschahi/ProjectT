@@ -27,7 +27,7 @@ namespace ProjectT
 		}
 		public override void Unload()
 		{
-			TwitchConfigs.SaveListConfig(AllViewers);
+			UpdateViewerList();
 			stopBot();
 		}
 
@@ -71,7 +71,17 @@ namespace ProjectT
 					return true;
 				}
 			}
-
+			return false;
+		}
+		public static bool doesViewerExist(Viewer viewer)
+		{
+			foreach (var item in AllViewers)
+			{
+				if (item.Name == viewer.Name)
+				{
+					return true;
+				}
+			}
 			return false;
 		}
 
@@ -82,6 +92,7 @@ namespace ProjectT
             newguy.Coins = startingcoins;
             TwitchConfigs.AddNewUser(newguy);
 			AllViewers.Add(newguy);
+			UpdateViewerList();
             return newguy;
         }
 
@@ -99,7 +110,7 @@ namespace ProjectT
 			if (AllViewers[index].Coins >= coinstoremove)
 			{
 				AllViewers[index].Coins = AllViewers[index].Coins - coinstoremove;
-				TwitchConfigs.SaveListConfig(AllViewers);
+				UpdateViewerList();
 				return true;
 			}
 			else
@@ -108,9 +119,71 @@ namespace ProjectT
 			}
 		}
 
+		public static void UpdateViewerList()
+		{
+			List<Viewer> mem = AllViewers;
+			TwitchConfigs.SaveListConfig(mem);
+			BroadcastHandler.BroadcastonViewerListUpdate(mem);
+		}
+
 		public void debugginglog(string message)
 		{
 			Logger.Info(message);
+		}
+
+		public override object Call(params object[] args)
+		{
+			int argsLength = args.Length;
+			Array.Resize(ref args, 6);
+
+			try
+			{
+				string message = args[0] as string;
+				if (message == "SendMessage")
+				{
+					TwitchConfigs.LogDebug("Received Message from other Mod. Trying to send to chatqueue");
+					MessageQueue.messageQueue.Enqueue(args[1] as string);
+					TwitchConfigs.LogDebug("Message added to queue");
+				}
+				else if (message == "AddCoins")
+				{
+					TwitchConfigs.LogDebug("Received Instruction from other Mod. Looking if user exists...");
+					if (doesViewerExist(args[1] as Viewer))
+					{
+						TwitchConfigs.LogDebug("Confirmed that user exists. Adding coins to user");
+						AddCoins(args[1] as Viewer, Convert.ToDouble(args[2] as string));
+						TwitchConfigs.LogDebug("Coins successfully added to user");
+					}
+					
+					TwitchConfigs.LogDebug("User does not exist. Discarding.");
+				}
+				else if (message == "RemoveCoins")
+				{
+					TwitchConfigs.LogDebug("Received Instruction from other Mod. Looking if user exists...");
+					if(doesViewerExist(args[1] as Viewer))
+					{
+						TwitchConfigs.LogDebug("Confirmed that user exists. attempting to remove coins from user...");
+						return RemoveCoins(args[1] as Viewer, Convert.ToDouble(args[2] as string));
+					}
+					TwitchConfigs.LogDebug("User does not exist. Discarding.");
+					return false;
+				}
+				else if (message == "SendWhisper")
+				{
+					TwitchConfigs.LogDebug("Received Message from other Mod. trying to send whisper...");
+					Mainconnector.Client.SendWhisper(args[1] as string, args[2] as string);
+					TwitchConfigs.LogDebug("Successfully sent whisper to Viewer");
+				}
+				else
+				{
+					TwitchConfigs.LogDebug("Call Error: Unknown Message: " + message);
+				}
+			}
+			catch (Exception e)
+			{
+				TwitchConfigs.LogDebug("Call Error: " + e.StackTrace + e.Message);
+			}
+			return null;
 		}
 	}
 }

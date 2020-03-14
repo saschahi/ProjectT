@@ -22,6 +22,7 @@ namespace ProjectT
 		static private List<Object> onGiftedSubscription = new List<Object>();
 		static private List<Object> onCommunitySubscription = new List<Object>();
 		static private List<Object> onBeingHosted = new List<Object>();
+		static private List<Object> onViewerListUpdate = new List<Object>();
 
 
 		static public void setupHandler()
@@ -184,6 +185,20 @@ namespace ProjectT
 					onBeingHosted.Add(Activator.CreateInstance(item));
 				}
 			}
+
+			foreach (var item in allsubclasses)
+			{
+				var info = item.GetMethod("onViewerListUpdate", new Type[] { typeof(Viewer), typeof(int) });
+				if (info == null)
+				{
+					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+				}
+				else
+				{
+					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					onViewerListUpdate.Add(Activator.CreateInstance(item));
+				}
+			}
 		}
 
 		static public void BroadcastTwitchMessage(Viewer viewer, string message, int bits)
@@ -221,7 +236,7 @@ namespace ProjectT
 			}
 		}
 
-		static public void BroadcastonConnected(Viewer viewer, string message)
+		static public void BroadcastonConnected()
 		{
 			object[] parameters = new object[0];
 			int count = 0;
@@ -236,7 +251,7 @@ namespace ProjectT
 			}
 		}
 
-		static public void BroadcastonDisconnected(Viewer viewer, string message)
+		static public void BroadcastonDisconnected()
 		{
 			object[] parameters = new object[0];
 			int count = 0;
@@ -361,6 +376,21 @@ namespace ProjectT
 			}
 		}
 
+		static public void BroadcastonViewerListUpdate(List<Viewer> ListOfAllViewers)
+		{
+			object[] parameters = new object[1];
+			parameters[0] = ListOfAllViewers;
+			int count = 0;
+			foreach (var item in allsubclasses)
+			{
+				var methodInfo = item.GetMethod("onViewerListUpdate", new Type[] { typeof(List<Viewer>) });
+				if (methodInfo != null)
+				{
+					methodInfo.Invoke(onViewerListUpdate[count], parameters);
+				}
+				count++;
+			}
+		}
 
 	}
 }

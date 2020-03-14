@@ -36,7 +36,7 @@ namespace ProjectT
             {
                 Client = new TwitchClient(customClient);
             }
-
+            
             // Initialize the client with the credentials instance, and setting a default channel to connect to.
             Client.Initialize(credentials, Authdata.broadcastername);
 
@@ -62,7 +62,6 @@ namespace ProjectT
             Client.Connect();
             
             AutoResetEvent eventHandler = new AutoResetEvent(false);
-
 
             wait: eventHandler.WaitOne(250);
 
@@ -104,6 +103,15 @@ namespace ProjectT
 
         private void OnReSubscriber(object sender, OnReSubscriberArgs e)
         {
+            if(ProjectT.doesViewerExist(e.ReSubscriber.DisplayName))
+            {
+                BroadcastHandler.BroadcastonReSubscriber(ProjectT.getViewerFromString(e.ReSubscriber.DisplayName));
+            }
+            else
+            {
+                ProjectT.AddNewUser(e.ReSubscriber.DisplayName);
+                BroadcastHandler.BroadcastonReSubscriber(ProjectT.getViewerFromString(e.ReSubscriber.DisplayName));
+            }
             TwitchConfigs.LogDebug("Got a Resubscriber: " + e.ReSubscriber.DisplayName + ", Subscription Plan: " + e.ReSubscriber.SubscriptionPlanName);
         }
 
@@ -114,33 +122,70 @@ namespace ProjectT
 
         private void OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
+            if (ProjectT.doesViewerExist(e.Subscriber.DisplayName))
+            {
+                BroadcastHandler.BroadcastonNewSubscriber(ProjectT.getViewerFromString(e.Subscriber.DisplayName));
+            }
+            else
+            {
+                ProjectT.AddNewUser(e.Subscriber.DisplayName);
+                BroadcastHandler.BroadcastonReSubscriber(ProjectT.getViewerFromString(e.Subscriber.DisplayName));
+            }
             TwitchConfigs.LogDebug("New Subscriber: " + e.Subscriber.DisplayName);
         }
 
         private void OnIncorrectLogin(object sender, OnIncorrectLoginArgs e)
         {
+            BroadcastHandler.BroadcastonIncorrectLogin();
             TwitchConfigs.LogDebug("INCORRECT LOGIN ERROR - Pls check the setup file. thx");
         }
 
         private void OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
         {
+            if (ProjectT.doesViewerExist(e.GiftedSubscription.DisplayName))
+            {
+                BroadcastHandler.BroadcastonGiftedSubscription(ProjectT.getViewerFromString(e.GiftedSubscription.DisplayName));
+            }
+            else
+            {
+                ProjectT.AddNewUser(e.GiftedSubscription.DisplayName);
+                BroadcastHandler.BroadcastonGiftedSubscription(ProjectT.getViewerFromString(e.GiftedSubscription.DisplayName));
+            }
             TwitchConfigs.LogDebug("Got Gifted Subscription: " + e.GiftedSubscription.DisplayName);
         }
 
         private void OnCommunitySubscription(object sender, OnCommunitySubscriptionArgs e)
         {
+            if (ProjectT.doesViewerExist(e.GiftedSubscription.DisplayName))
+            {
+                BroadcastHandler.BroadcastonCommunitySubscription(ProjectT.getViewerFromString(e.GiftedSubscription.DisplayName));
+            }
+            else
+            {
+                ProjectT.AddNewUser(e.GiftedSubscription.DisplayName);
+                BroadcastHandler.BroadcastonCommunitySubscription(ProjectT.getViewerFromString(e.GiftedSubscription.DisplayName));
+            }
             TwitchConfigs.LogDebug("Got Community Subscription: " + e.GiftedSubscription.DisplayName);
         }
 
         private void OnBeingHosted(object sender, OnBeingHostedArgs e)
         {
+            if (ProjectT.doesViewerExist(e.BeingHostedNotification.HostedByChannel))
+            {
+                BroadcastHandler.BroadcastonBeingHosted(ProjectT.getViewerFromString(e.BeingHostedNotification.HostedByChannel), e.BeingHostedNotification.Viewers);
+            }
+            else
+            {
+                ProjectT.AddNewUser(e.BeingHostedNotification.HostedByChannel);
+                BroadcastHandler.BroadcastonBeingHosted(ProjectT.getViewerFromString(e.BeingHostedNotification.HostedByChannel), e.BeingHostedNotification.Viewers);
+            }
             TwitchConfigs.LogDebug("Being hostet by " + e.BeingHostedNotification.HostedByChannel + " with " + e.BeingHostedNotification.Viewers + " Viewers. Autohost: " + e.BeingHostedNotification.IsAutoHosted);
         }
 
         private void OnConnected(object sender, OnConnectedArgs e)
         {
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} succesfully connected to Twitch.");
-
+            BroadcastHandler.BroadcastonConnected();
             if (!string.IsNullOrWhiteSpace(e.AutoJoinChannel))
                 TwitchConfigs.LogDebug($"The bot will now attempt to automatically join the channel provided when the Initialize method was called: {e.AutoJoinChannel}");
         }
@@ -149,6 +194,7 @@ namespace ProjectT
         {
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} just joined the channel: {e.Channel}");
             MessageQueue.messageQueue.Enqueue("TProject Succesfully started");
+            
         }
 
         private void OnMessageReceived(object sender, OnMessageReceivedArgs e)
@@ -160,6 +206,7 @@ namespace ProjectT
 
         private void OnLeftChannel(object sender, OnLeftChannelArgs e)
         {
+            BroadcastHandler.BroadcastonDisconnected();
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} just left the channel: {e.Channel}");
         }
 
@@ -170,11 +217,21 @@ namespace ProjectT
 
         private void OnConnectionError(object sender, OnConnectionErrorArgs e)
         {
+            BroadcastHandler.BroadcastonConnectionError();
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} had a connection error: {e.Error.Message}");
         }
 
         private void OnWhisperReceived(object sender, OnWhisperReceivedArgs e)
         {
+            if (ProjectT.doesViewerExist(e.WhisperMessage.DisplayName))
+            {
+                BroadcastHandler.BroadcastTwitchWhisper(ProjectT.getViewerFromString(e.WhisperMessage.DisplayName), e.WhisperMessage.Message);
+            }
+            else
+            {
+                ProjectT.AddNewUser(e.WhisperMessage.DisplayName);
+                BroadcastHandler.BroadcastTwitchWhisper(ProjectT.getViewerFromString(e.WhisperMessage.DisplayName), e.WhisperMessage.Message);
+            }
             TwitchConfigs.LogDebug($"The bot got a whisper: {e.WhisperMessage.Message}");
         }
 
