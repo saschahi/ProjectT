@@ -359,15 +359,15 @@ namespace ProjectT
 				count++;
 			}
 		}
-		static public void BroadcastonBeingHosted(Viewer viewer, int anzahl)
+		static public void BroadcastonBeingHosted(string beinghostedby, int anzahl)
 		{
 			object[] parameters = new object[1];
-			parameters[0] = viewer;
+			parameters[0] = beinghostedby;
 			parameters[1] = anzahl;
 			int count = 0;
 			foreach (var item in allsubclasses)
 			{
-				var methodInfo = item.GetMethod("onBeingHosted", new Type[] { typeof(Viewer), typeof(int) });
+				var methodInfo = item.GetMethod("onBeingHosted", new Type[] { typeof(string), typeof(int) });
 				if (methodInfo != null)
 				{
 					methodInfo.Invoke(onBeingHosted[count], parameters);
@@ -381,14 +381,17 @@ namespace ProjectT
 			object[] parameters = new object[1];
 			parameters[0] = ListOfAllViewers;
 			int count = 0;
-			foreach (var item in allsubclasses)
+			if (allsubclasses != null)
 			{
-				var methodInfo = item.GetMethod("onViewerListUpdate", new Type[] { typeof(List<Viewer>) });
-				if (methodInfo != null)
+				foreach (var item in allsubclasses)
 				{
-					methodInfo.Invoke(onViewerListUpdate[count], parameters);
+					var methodInfo = item.GetMethod("onViewerListUpdate", new Type[] { typeof(List<Viewer>) });
+					if (methodInfo != null)
+					{
+						methodInfo.Invoke(onViewerListUpdate[count], parameters);
+					}
+					count++;
 				}
-				count++;
 			}
 		}
 

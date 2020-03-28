@@ -95,10 +95,10 @@ namespace ProjectT
 
         static public void CreateDebug()
         {
-            StreamWriter test = File.AppendText(Debuglog);
-            test.WriteLine("created log");
+            /*StreamWriter test = File.AppendText(Debuglog);
+            test.WriteLine(DateTime.Now + "created log");
             test.Close();
-            LogDebug("Debuglog created");
+            LogDebug("Debuglog created");*/
         }
 
         
@@ -108,13 +108,9 @@ namespace ProjectT
             ViewerJsonHelper tester = new ViewerJsonHelper();
 
 
-            Viewer test = new Viewer();
-            test.setName("Testuser");
-            test.setCoins(0);
+            Viewer test = new Viewer("Bankuser", "1", 0);
             tester.List.Add(test);
-            Viewer test2 = new Viewer();
-            test2.setName("Testuser2");
-            test2.setCoins(50);
+            Viewer test2 = new Viewer("Bankuser2", "2", 0);
             tester.List.Add(test2);
 
             string json = JsonConvert.SerializeObject(tester);
@@ -145,7 +141,7 @@ namespace ProjectT
                 {
                     if (neu.Name == alt.Name)
                     {
-                        alt.setCoins(neu.Coins);
+                        alt.Coins = neu.Coins;
                         gefunden = true;
                         break;
                     }
