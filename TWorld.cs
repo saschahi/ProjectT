@@ -8,6 +8,7 @@ namespace ProjectT
     {
         public override void Initialize()
         {
+            /*
             //if bot is activated and you join multiplayer, disable bot
             if (ProjectT.BotActivated)
             {
@@ -24,6 +25,7 @@ namespace ProjectT
                     ProjectT.startBot();
                 }
             }
+            */
         }
     }
 }

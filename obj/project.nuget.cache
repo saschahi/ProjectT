@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Nh3bfbyf2C4xpO8klYCgzBB8da4GARYIofVszjTIcuim5DuJSYFa4yhA+jegYXlXdMQxcfooMvLp68sXZDcdiQ==",
+  "success": true,
+  "projectFilePath": "G:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Saschahi\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\3.1.2\\microsoft.extensions.logging.abstractions.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}

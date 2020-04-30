@@ -213,7 +213,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("MessageHandler", new Type[] { typeof(Viewer), typeof(string), typeof(int) });
 				if(methodInfo != null)
 				{
-					methodInfo.Invoke(MessageHandlers[count], parameters);
+					try
+					{
+						methodInfo.Invoke(MessageHandlers[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -230,7 +234,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("WhisperMessageHandler", new Type[] { typeof(Viewer), typeof(string) });
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(WhisperMessageHandlers[count], parameters);
+					try
+					{
+						methodInfo.Invoke(WhisperMessageHandlers[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -245,7 +253,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onConnected");
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onConnected[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onConnected[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -260,7 +272,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onConnected");
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onConnected[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onConnected[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -275,7 +291,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onConnectionError");
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onConnectionError[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onConnectionError[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -291,7 +311,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onReSubscriber", new Type[] { typeof(Viewer) });
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onReSubscriber[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onReSubscriber[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -307,7 +331,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onNewSubscriber", new Type[] { typeof(Viewer) });
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onNewSubscriber[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onNewSubscriber[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -322,7 +350,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onIncorrectLogin");
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onIncorrectLogin[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onIncorrectLogin[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -338,7 +370,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onGiftedSubscription", new Type[] { typeof(Viewer) });
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onGiftedSubscription[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onGiftedSubscription[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -354,7 +390,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onCommunitySubscription", new Type[] { typeof(Viewer) });
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onCommunitySubscription[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onCommunitySubscription[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -370,7 +410,11 @@ namespace ProjectT
 				var methodInfo = item.GetMethod("onBeingHosted", new Type[] { typeof(string), typeof(int) });
 				if (methodInfo != null)
 				{
-					methodInfo.Invoke(onBeingHosted[count], parameters);
+					try
+					{
+						methodInfo.Invoke(onBeingHosted[count], parameters);
+					}
+					catch { }
 				}
 				count++;
 			}
@@ -388,7 +432,11 @@ namespace ProjectT
 					var methodInfo = item.GetMethod("onViewerListUpdate", new Type[] { typeof(List<Viewer>) });
 					if (methodInfo != null)
 					{
-						methodInfo.Invoke(onViewerListUpdate[count], parameters);
+						try
+						{
+							methodInfo.Invoke(onViewerListUpdate[count], parameters);
+						}
+						catch { }
 					}
 					count++;
 				}

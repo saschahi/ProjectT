@@ -13,14 +13,22 @@ namespace ProjectT
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
-        [Label("BEWARE! The Twitch-Setup Config is Performed here: G:\\users\\*name*\\Dokuments\\My Games\\Terraria\\ModLoader\\TProject")]
+        [Label("BEWARE! The Twitch-Setup Config is Performed here:")]
         public bool Information => false;
-        
+
+        [Label("C:\\users\\*name*\\Dokuments\\My Games\\Terraria\\ModLoader\\TProject")]
+        public bool Information1 => false;
+
         [Label("Do this OFF STREAM or with the stream blacked out.")]
         public bool Information2 => false;
 
-        [Label("If you need help, join ProjectTs Discord: Discord.gg/9dauEnQ")]
+        [Label("If you need help, join Project-Ts Discord: Discord.gg/9dauEnQ")]
         public bool Information3 => false;
+
+        [Label("Enable the Twitch Connection")]
+        [Tooltip("A reload is recommended. but not required.")]
+        [DefaultValue(false)]
+        public bool EnableMod { get; set; } = new bool();
 
         [Label("Enable Debug Mode")]
         [Tooltip("Adds a Debug.txt to the TProjects folder - useful for developers")]
@@ -53,6 +61,7 @@ namespace ProjectT
                 minutes = 1;
             }*/
             TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
+            ProjectT.updateConfig();            
         }
     }
 }

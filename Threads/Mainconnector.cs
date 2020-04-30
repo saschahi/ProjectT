@@ -116,19 +116,19 @@ namespace ProjectT
 
         private void OnReSubscriber(object sender, OnReSubscriberArgs e)
         {
-            if(ProjectT.doesViewerExistbyID(e.ReSubscriber.UserId))
+            if(ViewerController.doesViewerExistbyID(e.ReSubscriber.UserId))
             {
-                Viewer viewer = ProjectT.getViewerFromUserID(e.ReSubscriber.UserId);
-                ProjectT.UpdateLastSeen(viewer);
+                Viewer viewer = ViewerController.getViewerFromUserID(e.ReSubscriber.UserId);
+                ViewerController.UpdateLastSeen(viewer);
                 BroadcastHandler.BroadcastonReSubscriber(viewer);
             }
             else
             {
-                Viewer temp = ProjectT.AddNewUser(e.ReSubscriber.DisplayName, e.ReSubscriber.UserId);
+                Viewer temp = ViewerController.AddNewUser(e.ReSubscriber.DisplayName, e.ReSubscriber.UserId);
 
 
                 
-                BroadcastHandler.BroadcastonReSubscriber(ProjectT.getViewerFromUserID(e.ReSubscriber.UserId));
+                BroadcastHandler.BroadcastonReSubscriber(ViewerController.getViewerFromUserID(e.ReSubscriber.UserId));
             }
             TwitchConfigs.LogDebug("Got a Resubscriber: " + e.ReSubscriber.DisplayName + ", Subscription Plan: " + e.ReSubscriber.SubscriptionPlanName);
         }
@@ -140,16 +140,16 @@ namespace ProjectT
 
         private void OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
-            if (ProjectT.doesViewerExistbyID(e.Subscriber.UserId))
+            if (ViewerController.doesViewerExistbyID(e.Subscriber.UserId))
             {
-                Viewer viewer = ProjectT.getViewerFromUserID(e.Subscriber.UserId);
-                ProjectT.UpdateLastSeen(viewer);
+                Viewer viewer = ViewerController.getViewerFromUserID(e.Subscriber.UserId);
+                ViewerController.UpdateLastSeen(viewer);
                 BroadcastHandler.BroadcastonNewSubscriber(viewer);
             }
             else
             {
-                ProjectT.AddNewUser(e.Subscriber.DisplayName, e.Subscriber.UserId);
-                BroadcastHandler.BroadcastonReSubscriber(ProjectT.getViewerFromUserID(e.Subscriber.UserId));
+                ViewerController.AddNewUser(e.Subscriber.DisplayName, e.Subscriber.UserId);
+                BroadcastHandler.BroadcastonReSubscriber(ViewerController.getViewerFromUserID(e.Subscriber.UserId));
             }
             TwitchConfigs.LogDebug("New Subscriber: " + e.Subscriber.DisplayName);
         }
@@ -162,28 +162,28 @@ namespace ProjectT
 
         private void OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
         {
-            if (ProjectT.doesViewerExistbyID(e.GiftedSubscription.UserId))
+            if (ViewerController.doesViewerExistbyID(e.GiftedSubscription.UserId))
             {
-                BroadcastHandler.BroadcastonGiftedSubscription(ProjectT.getViewerFromUserID(e.GiftedSubscription.UserId));
+                BroadcastHandler.BroadcastonGiftedSubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
             }
             else
             {
-                ProjectT.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);
-                BroadcastHandler.BroadcastonGiftedSubscription(ProjectT.getViewerFromUserID(e.GiftedSubscription.UserId));
+                ViewerController.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);
+                BroadcastHandler.BroadcastonGiftedSubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
             }
             TwitchConfigs.LogDebug("Got Gifted Subscription: " + e.GiftedSubscription.DisplayName);
         }
 
         private void OnCommunitySubscription(object sender, OnCommunitySubscriptionArgs e)
         {
-            if (ProjectT.doesViewerExistbyID(e.GiftedSubscription.UserId))
+            if (ViewerController.doesViewerExistbyID(e.GiftedSubscription.UserId))
             {
-                BroadcastHandler.BroadcastonCommunitySubscription(ProjectT.getViewerFromUserID(e.GiftedSubscription.UserId));
+                BroadcastHandler.BroadcastonCommunitySubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
             }
             else
             {
-                ProjectT.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);
-                BroadcastHandler.BroadcastonCommunitySubscription(ProjectT.getViewerFromUserID(e.GiftedSubscription.UserId));
+                ViewerController.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);
+                BroadcastHandler.BroadcastonCommunitySubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
             }
             TwitchConfigs.LogDebug("Got Community Subscription: " + e.GiftedSubscription.DisplayName);
         }
@@ -212,9 +212,9 @@ namespace ProjectT
         private void OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
             
-            if (ProjectT.doesViewerExistbyID(e.ChatMessage.UserId))
+            if (ViewerController.doesViewerExistbyID(e.ChatMessage.UserId))
             {
-                Viewer viewer = ProjectT.getViewerFromUserID(e.ChatMessage.UserId);
+                Viewer viewer = ViewerController.getViewerFromUserID(e.ChatMessage.UserId);
                 if (e.ChatMessage.IsModerator)
                 {
                     if(!viewer.mod)
@@ -229,18 +229,18 @@ namespace ProjectT
                         viewer.mod = false;
                     }
                 }
-                ProjectT.UpdateLastSeen(viewer);
+                ViewerController.UpdateLastSeen(viewer);
                 BroadcastHandler.BroadcastTwitchMessage(viewer, e.ChatMessage.Message, e.ChatMessage.Bits);
             }
             else
             {
-                ProjectT.AddNewUser(e.ChatMessage.DisplayName, e.ChatMessage.UserId);
-                BroadcastHandler.BroadcastTwitchMessage(ProjectT.getViewerFromUserID(e.ChatMessage.UserId), e.ChatMessage.Message, e.ChatMessage.Bits);
+                ViewerController.AddNewUser(e.ChatMessage.DisplayName, e.ChatMessage.UserId);
+                BroadcastHandler.BroadcastTwitchMessage(ViewerController.getViewerFromUserID(e.ChatMessage.UserId), e.ChatMessage.Message, e.ChatMessage.Bits);
             }
 
 
             TwitchConfigs.LogDebug("Received Message: " + e.ChatMessage.Username + ": " + e.ChatMessage.Message);
-            BaseMessageHandler(ProjectT.getViewerFromUserID(e.ChatMessage.UserId), e.ChatMessage.Message, e.ChatMessage.Bits);
+            BaseMessageHandler(ViewerController.getViewerFromUserID(e.ChatMessage.UserId), e.ChatMessage.Message, e.ChatMessage.Bits);
         }
 
         private void OnLeftChannel(object sender, OnLeftChannelArgs e)
@@ -262,47 +262,19 @@ namespace ProjectT
 
         private void OnWhisperReceived(object sender, OnWhisperReceivedArgs e)
         {
-            if (ProjectT.doesViewerExistbyID(e.WhisperMessage.UserId))
+            if (ViewerController.doesViewerExistbyID(e.WhisperMessage.UserId))
             {
-                Viewer viewer = ProjectT.getViewerFromUserID(e.WhisperMessage.UserId);
-                ProjectT.UpdateLastSeen(viewer);
+                Viewer viewer = ViewerController.getViewerFromUserID(e.WhisperMessage.UserId);
+                ViewerController.UpdateLastSeen(viewer);
                 BroadcastHandler.BroadcastTwitchWhisper(viewer, e.WhisperMessage.Message);
             }
             else
             {
-                ProjectT.AddNewUser(e.WhisperMessage.DisplayName, e.WhisperMessage.UserId);
-                BroadcastHandler.BroadcastTwitchWhisper(ProjectT.getViewerFromUserID(e.WhisperMessage.UserId), e.WhisperMessage.Message);
+                ViewerController.AddNewUser(e.WhisperMessage.DisplayName, e.WhisperMessage.UserId);
+                BroadcastHandler.BroadcastTwitchWhisper(ViewerController.getViewerFromUserID(e.WhisperMessage.UserId), e.WhisperMessage.Message);
             }
             TwitchConfigs.LogDebug($"The bot got a whisper: {e.WhisperMessage.Message}" +  " from " + e.WhisperMessage.DisplayName);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private static void BaseMessageHandler(Viewer viewer, string message, int bits)
         {
@@ -327,11 +299,15 @@ namespace ProjectT
                     string v4 = new string(v3.TakeWhile(char.IsDigit).ToArray());
                     if (v2 != null && v4 != null)
                     {
-                        if (ProjectT.doesViewerExistbyName(v2))
+                        if (ViewerController.doesViewerExistbyName(v2))
                         {
-                            //ProjectT.AddCoins(ProjectT.getViewerFromDisplayname(v2), Convert.ToDouble(v4));
-                            CoinAddQueue.addToQueue(ProjectT.getViewerFromDisplayname(v2), Convert.ToDouble(v4));
-                            MessageQueue.messageQueue.Enqueue("Added " + v4 + " coins to " + v2 + "s account");
+                            try
+                            {
+                                ViewerController.AddCoins(ViewerController.getViewerFromDisplayname(v2), Convert.ToDouble(v4));
+                                //CoinAddQueue.addToQueue(ViewerController.getViewerFromDisplayname(v2), Convert.ToDouble(v4));
+                                MessageQueue.messageQueue.Enqueue("Added " + v4 + " coins to " + v2 + "s account");
+                            }
+                            catch { }
                             return;
                         }
                     }
@@ -357,76 +333,7 @@ namespace ProjectT
         }
         
         
-        static private void RunListBot()
-        {
-            string KeyQuestion;
-            while (true)
-            {
-                try
-                {
-                    string DlLink = "https://tmi.twitch.tv/group/user/" + Authdata.broadcastername + "/chatters";
-                    KeyQuestion = new WebClient().DownloadString(DlLink);
-                    ProjectT.CurrentViewers.Clear();
-                    List<Viewer> tempviewers = new List<Viewer>();
-                    //dynamic Userlist = JsonConvert.DeserializeObject(KeyQuestion);
-                    JsonChatter userlist = JsonConvert.DeserializeObject<JsonChatter>(KeyQuestion);
-                    /*
-                    foreach (var item in userlist.chatters.viewers)
-                    {
-                        if (!tempviewers.Contains(item))
-                        {
-                            ProjectT.CurrentViewers.Add(item);
-                        }
-                    }
-                    foreach (var item in userlist.chatters.vips)
-                    {
-                        if (!ProjectT.CurrentViewers.Contains(item))
-                        {
-                            ProjectT.CurrentViewers.Add(item);
-                        }
-                    }
-                    foreach (var item in userlist.chatters.admins)
-                    {
-                        if (!ProjectT.CurrentViewers.Contains(item))
-                        {
-                            ProjectT.CurrentViewers.Add(item);
-                        }
-                    }
-                    foreach (var item in userlist.chatters.broadcaster)
-                    {
-                        if (!Currentviewers.Contains(item))
-                        {
-                            Currentviewers.Add(item);
-                        }
-                    }
-                    foreach (var item in userlist.chatters.moderators)
-                    {
-                        if (!Currentviewers.Contains(item))
-                        {
-                            Currentviewers.Add(item);
-                        }
-                        if (!OnlineMods.Contains(item))
-                        {
-                            OnlineMods.Add(item);
-                        }
-                    }
-                    foreach (var item in userlist.chatters.global_mods)
-                    {
-                        if (!Currentviewers.Contains(item))
-                        {
-                            Currentviewers.Add(item);
-                        }
-                    }
-                    */
-                }
-                catch
-                {
-
-                }
-                //sleep for 60 seconds
-                Thread.Sleep(60000);
-            }
-        }
+        
 
         public List<Viewer> CompareToAllViewers(List<string> Viewernames)
         {

@@ -31,3 +31,4 @@ G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\n
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TwitchLib.Client.Models.dll
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TwitchLib.Communication.dll
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\Microsoft.Extensions.Logging.Abstractions.dll
+G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\obj\Debug\net472\ProjectT.csproj.CoreCompileInputs.cache

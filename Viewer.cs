@@ -24,19 +24,19 @@ namespace ProjectT
             Name = name;
             Coins = 0;
             UserID = userid;
-            last_seen = DateTime.Now;
+            last_seen = DateTime.UtcNow;
         }
         public Viewer(string name, string userid, double coins)
         {
             Name = name;
             Coins = coins;
             UserID = userid;
-            last_seen = DateTime.Now;
+            last_seen = DateTime.UtcNow;
         }
 
         public Viewer()
         {
-            last_seen = DateTime.Now;
+            last_seen = DateTime.UtcNow;
         }
     }
 
