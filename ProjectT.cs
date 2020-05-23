@@ -1,22 +1,18 @@
 using Terraria.ModLoader;
-using Terraria;
 using System.Collections.Generic;
 using System;
-using System.Reflection;
-using System.Linq;
 
 namespace ProjectT
 {
 	public class ProjectT : Mod
 	{
 		public static bool BotActivated = false;
-		//public static List<Viewer> AllViewers = new List<Viewer>();
 		public static List<Viewer> CurrentViewers = new List<Viewer>();
 		public static double startingcoins = 0;
 
 		public ProjectT()
 		{
-
+			//test
 		}
 
 		public override void Load()

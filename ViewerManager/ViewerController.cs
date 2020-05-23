@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjectT
 {
-    static class ViewerController
-    {
-        public static List<Viewer> AllViewers = new List<Viewer>();
+	static class ViewerController
+	{
+		public static List<Viewer> AllViewers = new List<Viewer>();
 		public static List<Viewer> CurrentViewers = new List<Viewer>();
 
 		public static Viewer getViewerFromDisplayname(string Displayname)

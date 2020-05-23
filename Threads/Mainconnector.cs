@@ -1,10 +1,6 @@
 ﻿using System.Threading;
-using System.Net;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
-using Terraria;
-using Terraria.ModLoader;
 using TwitchLib.Client;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
@@ -16,6 +12,7 @@ namespace ProjectT
 {
     public class Mainconnector
     {
+
         public static TwitchClient Client { get; private set; }
         private static Authdata Authdata = new Authdata();
 
@@ -23,11 +20,6 @@ namespace ProjectT
         {
             BroadcastHandler.setupHandler();
             Authdata = TwitchConfigs.GetAuthdata();
-
-
-
-
-
 
             var clientOptions = new ClientOptions
             {
@@ -311,7 +303,6 @@ namespace ProjectT
                             return;
                         }
                     }
-                    
                     return;
                 }
             }
@@ -332,16 +323,9 @@ namespace ProjectT
             BroadcastHandler.BroadcastTwitchMessage(viewer, message, bits);
         }
         
-        
-        
-
         public List<Viewer> CompareToAllViewers(List<string> Viewernames)
         {
             List<Viewer> temp = new List<Viewer>();
-
-
-
-
 
             return temp;
         }

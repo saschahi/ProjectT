@@ -1,6 +1,6 @@
 displayName = Project-T - Twitch Library for Terraria
 author = Saschahi
-version = 0.3.0
+version = 0.3.3
 dllReferences = TwitchLib.Client, TwitchLib.Client.Enums, TwitchLib.Client.Models, TwitchLib.Communication, Microsoft.Extensions.Logging.Abstractions
 homepage=https://discord.gg/7t93dpx
 side=both

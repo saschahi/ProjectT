@@ -41,9 +41,9 @@
       "frameworks": {
         "net472": {
           "dependencies": {
-            "Microsoft.Extensions.Logging.Abstractions": {
+            "tModLoader.CodeAssist": {
               "target": "Package",
-              "version": "[3.1.2, )"
+              "version": "[0.1.*, )"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
