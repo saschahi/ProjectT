@@ -424,7 +424,7 @@ namespace ProjectT
 
 		static public void BroadcastonViewerListUpdate(List<Viewer> ListOfAllViewers)
 		{
-			TwitchConfigs.LogDebug("BROADCASTING");
+			//TwitchConfigs.LogDebug("BROADCASTING");
 			object[] parameters = new object[1];
 			parameters[0] = ListOfAllViewers;
 			int count = 0;

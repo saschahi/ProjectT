@@ -147,7 +147,7 @@ namespace ProjectT
             }
             ViewerJsonHelper writing = new ViewerJsonHelper();
             writing.List = existierend;
-            string json = JsonConvert.SerializeObject(writing);
+            string json = JsonConvert.SerializeObject(writing, Formatting.Indented);
             File.WriteAllText(Userconfigpath, json);
         }
 
