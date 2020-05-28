@@ -94,9 +94,7 @@ namespace ProjectT
 					if (ViewerController.doesViewerExistbyViewer(args[1] as Viewer))
 					{
 						TwitchConfigs.LogDebug("Confirmed that user exists. Adding coins to Viewer");
-						//CoinAddQueue.addToQueue(args[1] as Viewer, Convert.ToDouble(args[2] as string));
 						ViewerController.AddCoins(args[1] as Viewer, Convert.ToDouble(args[2] as string));
-						//AddCoins(args[1] as Viewer, Convert.ToDouble(args[2] as string));
 						TwitchConfigs.LogDebug("Coins successfully added to user.");
 
 					}

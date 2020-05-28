@@ -68,7 +68,8 @@ namespace ProjectT
 
         private static bool TestDebug()
         {
-            if (DebugConfig.Load())
+            if(File.Exists(Debuglog))
+            //if (DebugConfig.Load())
             {
                 return true;
             }
@@ -107,7 +108,6 @@ namespace ProjectT
         {
             ViewerJsonHelper tester = new ViewerJsonHelper();
 
-
             Viewer test = new Viewer("Bankuser", "1", 0);
             tester.List.Add(test);
             Viewer test2 = new Viewer("Bankuser2", "2", 0);
@@ -119,14 +119,8 @@ namespace ProjectT
 
         static public List<Viewer> getListConfig()
         {
-            List<Viewer> test = new List<Viewer>();
-            
-            
             JObject o1 = JObject.Parse(File.ReadAllText(Userconfigpath));
-
-
             ViewerJsonHelper read = o1.ToObject<ViewerJsonHelper>();
-
             return read.List;
         }
 
@@ -166,6 +160,12 @@ namespace ProjectT
 
         public static void LogDebug(string text)
         {
+            LogQueue.toLog.Enqueue(text);
+        }
+
+        public static void writeDebug(string text)
+        {
+            
             if (Karl == null)
             {
                 Karl = ModContent.GetInstance<ProjectTconfig>();

@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Threading;
 using Terraria;
+using Terraria.ModLoader;
 using TwitchLib.Client.Models;
 
 
@@ -18,6 +19,10 @@ namespace ProjectT
 
         public static void StartThread()
         {
+            if (TwitchConfigs.Karl == null)
+            {
+                TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
+            }
             runThread = TwitchConfigs.Karl.EnableMod;
 
             tlogin = TwitchConfigs.GetAuthdata();

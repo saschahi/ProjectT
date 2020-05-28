@@ -39,29 +39,16 @@ namespace ProjectT
         [Tooltip("If activated, sends a chatmessage in Twitch if the bot successfully connects.")]
         [DefaultValue(false)]
         public bool EnableChatDebugmessage { get; set; } = new bool();
-        /*
-        [Label("Coins per x minutes")]
-        [Tooltip("How many coins should be handed out to all active viewers per x minutes. Set to 0 to deactivate this feature.")]
-        [Range(0, 500)]
-        [Slider]
-        [DefaultValue(0)]
-        public double CoinsPer { get; set; } = new double();
 
-        [Label("Minutes between coin handouts")]
-        [Tooltip("How many minutes should pass between")]
-        [Range(1, 30)]
-        [Slider]
-        [DefaultValue(10)]
-        public int minutes { get; set; } = new int();
-        */
         public override void OnChanged()
         {
-            /*if (minutes == 0)
-            {
-                minutes = 1;
-            }*/
             TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
             ProjectT.updateConfig();            
+        }
+        public override void OnLoaded()
+        {
+            TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
+
         }
     }
 }

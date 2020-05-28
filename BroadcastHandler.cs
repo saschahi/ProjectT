@@ -21,6 +21,7 @@ namespace ProjectT
 		static private List<Object> onBeingHosted = new List<Object>();
 		static private List<Object> onViewerListUpdate = new List<Object>();
 
+		//how dafuck did I make this work?
 
 		static public void setupHandler()
         {
@@ -34,11 +35,11 @@ namespace ProjectT
 				var info = item.GetMethod("MessageHandler", new Type[] { typeof(Viewer), typeof(string), typeof(int) });
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method MessageHandler in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method MessageHandler in " + item.Namespace + " in " + item.Name);
 					MessageHandlers.Add(Activator.CreateInstance(item));
 				}
 			}
@@ -48,11 +49,11 @@ namespace ProjectT
 				var info = item.GetMethod("WhisperMessageHandler", new Type[] { typeof(Viewer), typeof(string) });
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method WhisperMessageHandler in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method WhisperMessageHandler in " + item.Namespace + " in " + item.Name);
 					WhisperMessageHandlers.Add(Activator.CreateInstance(item));
 				}
 			}
@@ -62,11 +63,11 @@ namespace ProjectT
 				var info = item.GetMethod("onConnected");
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onConnected in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onConnected in " + item.Namespace + " in " + item.Name);
 					onConnected.Add(Activator.CreateInstance(item));
 				}
 			}
@@ -76,11 +77,11 @@ namespace ProjectT
 				var info = item.GetMethod("onConnectionError");
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onConnectionError in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onConnectionError in " + item.Namespace + " in " + item.Name);
 					onConnectionError.Add(Activator.CreateInstance(item));
 				}
 			}
@@ -90,39 +91,39 @@ namespace ProjectT
 				var info = item.GetMethod("onDisconnected");
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onDisconnected in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onDisconnected in " + item.Namespace + " in " + item.Name);
 					onDisconnected.Add(Activator.CreateInstance(item));
 				}
 			}
 
 			foreach (var item in allsubclasses)
 			{
-				var info = item.GetMethod("onReSubscriber", new Type[] { typeof(Viewer) });
+				var info = item.GetMethod("onReSubscriber", new Type[] { typeof(Viewer) , typeof(string)});
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onReSubscriber in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onReSubscriber in " + item.Namespace + " in " + item.Name);
 					onReSubscriber.Add(Activator.CreateInstance(item));
 				}
 			}
 
 			foreach (var item in allsubclasses)
 			{
-				var info = item.GetMethod("onNewSubscriber", new Type[] { typeof(Viewer) });
+				var info = item.GetMethod("onNewSubscriber", new Type[] { typeof(Viewer) , typeof(string)});
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onNewSubscriber in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onNewSubscriber in " + item.Namespace + " in " + item.Name);
 					onNewSubscriber.Add(Activator.CreateInstance(item));
 				}
 			}
@@ -132,39 +133,39 @@ namespace ProjectT
 				var info = item.GetMethod("onIncorrectLogin");
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onIncorrectLogin in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onIncorrectLogin in " + item.Namespace + " in " + item.Name);
 					onIncorrectLogin.Add(Activator.CreateInstance(item));
 				}
 			}
 
 			foreach (var item in allsubclasses)
 			{
-				var info = item.GetMethod("onGiftedSubscription", new Type[] { typeof(Viewer) });
+				var info = item.GetMethod("onGiftedSubscription", new Type[] { typeof(Viewer) ,typeof(string)});
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onGiftedSubscription in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onGiftedSubscription in " + item.Namespace + " in " + item.Name);
 					onGiftedSubscription.Add(Activator.CreateInstance(item));
 				}
 			}
 
 			foreach (var item in allsubclasses)
 			{
-				var info = item.GetMethod("onCommunitySubscription", new Type[] { typeof(Viewer) });
+				var info = item.GetMethod("onCommunitySubscription", new Type[] { typeof(Viewer), typeof(string) });
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onCommunitySubscription in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onCommunitySubscription in " + item.Namespace + " in " + item.Name);
 					onCommunitySubscription.Add(Activator.CreateInstance(item));
 				}
 			}
@@ -174,25 +175,25 @@ namespace ProjectT
 				var info = item.GetMethod("onBeingHosted", new Type[] { typeof(Viewer), typeof(int) });
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onBeingHosted in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onBeingHosted in " + item.Namespace + " in " + item.Name);
 					onBeingHosted.Add(Activator.CreateInstance(item));
 				}
 			}
 
 			foreach (var item in allsubclasses)
 			{
-				var info = item.GetMethod("onViewerListUpdate", new Type[] { typeof(Viewer), typeof(int) });
+				var info = item.GetMethod("onViewerListUpdate", new Type[] { typeof(List<Viewer>) });
 				if (info == null)
 				{
-					TwitchConfigs.LogDebug("NEW didn't find Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW didn't find Method onViewerListUpdate in " + item.Namespace + " in " + item.Name);
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("NEW Found Method in " + item.Namespace + " in " + item.Name);
+					TwitchConfigs.LogDebug("NEW Found Method onViewerListUpdate in " + item.Namespace + " in " + item.Name);
 					onViewerListUpdate.Add(Activator.CreateInstance(item));
 				}
 			}
@@ -298,14 +299,15 @@ namespace ProjectT
 			}
 		}
 
-		static public void BroadcastonReSubscriber(Viewer viewer)
+		static public void BroadcastonReSubscriber(Viewer viewer, string tier)
 		{
-			object[] parameters = new object[1];
+			object[] parameters = new object[2];
 			parameters[0] = viewer;
+			parameters[1] = tier;
 			int count = 0;
 			foreach (var item in allsubclasses)
 			{
-				var methodInfo = item.GetMethod("onReSubscriber", new Type[] { typeof(Viewer) });
+				var methodInfo = item.GetMethod("onReSubscriber", new Type[] { typeof(Viewer) , typeof(string)});
 				if (methodInfo != null)
 				{
 					try
@@ -318,14 +320,15 @@ namespace ProjectT
 			}
 		}
 
-		static public void BroadcastonNewSubscriber(Viewer viewer)
+		static public void BroadcastonNewSubscriber(Viewer viewer, string tier)
 		{
-			object[] parameters = new object[1];
+			object[] parameters = new object[2];
 			parameters[0] = viewer;
+			parameters[1] = tier;
 			int count = 0;
 			foreach (var item in allsubclasses)
 			{
-				var methodInfo = item.GetMethod("onNewSubscriber", new Type[] { typeof(Viewer) });
+				var methodInfo = item.GetMethod("onNewSubscriber", new Type[] { typeof(Viewer), typeof(string)});
 				if (methodInfo != null)
 				{
 					try
@@ -357,14 +360,15 @@ namespace ProjectT
 			}
 		}
 
-		static public void BroadcastonGiftedSubscription(Viewer viewer)
+		static public void BroadcastonGiftedSubscription(Viewer viewer, string tier)
 		{
-			object[] parameters = new object[1];
+			object[] parameters = new object[2];
 			parameters[0] = viewer;
+			parameters[1] = tier;
 			int count = 0;
 			foreach (var item in allsubclasses)
 			{
-				var methodInfo = item.GetMethod("onGiftedSubscription", new Type[] { typeof(Viewer) });
+				var methodInfo = item.GetMethod("onGiftedSubscription", new Type[] { typeof(Viewer) , typeof(string)});
 				if (methodInfo != null)
 				{
 					try
@@ -377,14 +381,15 @@ namespace ProjectT
 			}
 		}
 
-		static public void BroadcastonCommunitySubscription(Viewer viewer)
+		static public void BroadcastonCommunitySubscription(Viewer viewer, string tier)
 		{
-			object[] parameters = new object[1];
+			object[] parameters = new object[2];
 			parameters[0] = viewer;
+			parameters[1] = tier;
 			int count = 0;
 			foreach (var item in allsubclasses)
 			{
-				var methodInfo = item.GetMethod("onCommunitySubscription", new Type[] { typeof(Viewer) });
+				var methodInfo = item.GetMethod("onCommunitySubscription", new Type[] { typeof(Viewer), typeof(string)});
 				if (methodInfo != null)
 				{
 					try
@@ -419,25 +424,24 @@ namespace ProjectT
 
 		static public void BroadcastonViewerListUpdate(List<Viewer> ListOfAllViewers)
 		{
+			TwitchConfigs.LogDebug("BROADCASTING");
 			object[] parameters = new object[1];
 			parameters[0] = ListOfAllViewers;
 			int count = 0;
-			if (allsubclasses != null)
+			foreach (var item in allsubclasses)
 			{
-				foreach (var item in allsubclasses)
+				var methodInfo = item.GetMethod("onViewerListUpdate", new Type[] { typeof(List<Viewer>) });
+				if (methodInfo != null)
 				{
-					var methodInfo = item.GetMethod("onViewerListUpdate", new Type[] { typeof(List<Viewer>) });
-					if (methodInfo != null)
+					try
 					{
-						try
-						{
-							methodInfo.Invoke(onViewerListUpdate[count], parameters);
-						}
-						catch { }
+						methodInfo.Invoke(onViewerListUpdate[count], parameters);
 					}
-					count++;
+					catch { }
 				}
+				count++;
 			}
+			
 		}
 
 	}

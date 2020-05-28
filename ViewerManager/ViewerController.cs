@@ -9,7 +9,9 @@ namespace ProjectT
 	static class ViewerController
 	{
 		public static List<Viewer> AllViewers = new List<Viewer>();
-		public static List<Viewer> CurrentViewers = new List<Viewer>();
+		//public static List<Viewer> CurrentViewers = new List<Viewer>();
+		//I don't need currentviewers.
+		//I have last_seen
 
 		public static Viewer getViewerFromDisplayname(string Displayname)
 		{
@@ -88,11 +90,12 @@ namespace ProjectT
 			UpdateViewerList();
 			return newguy;
 		}
+
 		public static void AddCoins(Viewer viewer, double coinstoadd)
 		{
 			try
 			{
-				int index = AllViewers.IndexOf(viewer);
+				int index = AllViewers.FindIndex((i) => i.Name == viewer.Name && i.UserID == viewer.UserID);
 				AllViewers[index].Coins = AllViewers[index].Coins + coinstoadd;
 			}
 			catch
@@ -101,9 +104,10 @@ namespace ProjectT
 			}
 			TwitchConfigs.SaveListConfig(AllViewers);
 		}
+
 		public static bool RemoveCoins(Viewer viewer, double coinstoremove)
 		{
-			int index = AllViewers.IndexOf(viewer);
+			int index = AllViewers.FindIndex((i) => i.Name == viewer.Name && i.UserID == viewer.UserID);
 
 			if (AllViewers[index].Coins >= coinstoremove)
 			{
@@ -116,16 +120,20 @@ namespace ProjectT
 				return false;
 			}
 		}
+
 		public static void UpdateViewerList()
 		{
 			List<Viewer> mem = AllViewers;
 			TwitchConfigs.SaveListConfig(mem);
 			BroadcastHandler.BroadcastonViewerListUpdate(mem);
 		}
+
 		public static void UpdateLastSeen(Viewer viewer)
 		{
-			int index = AllViewers.IndexOf(viewer);
+			int index = AllViewers.FindIndex((i) => i.Name == viewer.Name && i.UserID == viewer.UserID);
+
 			AllViewers[index].last_seen = DateTime.UtcNow;
+		    
 			UpdateViewerList();
 		}
 
@@ -133,11 +141,16 @@ namespace ProjectT
 		{
 			foreach (var item in chatters)
 			{
-				Viewer basic = getViewerFromUserID(item.UserID);
-				int index = AllViewers.IndexOf(basic);
-				AllViewers[index].vip = item.vip;
-				AllViewers[index].mod = item.mod;
-				AllViewers[index].last_seen = item.last_seen;
+				try
+				{
+					Viewer basic = getViewerFromUserID(item.UserID);
+					int index = AllViewers.FindIndex((i) => i.Name == basic.Name && i.UserID == basic.UserID);
+					//int index = AllViewers.IndexOf(basic);
+					AllViewers[index].vip = item.vip;
+					AllViewers[index].mod = item.mod;
+					AllViewers[index].last_seen = item.last_seen;
+				}
+				catch { }
 			}
 			UpdateViewerList();
 		}

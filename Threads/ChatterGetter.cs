@@ -22,7 +22,7 @@ namespace ProjectT
                     string DlLink = "https://tmi.twitch.tv/group/user/" + BroadcasterName + "/chatters";
                     TwitchConfigs.LogDebug("Successfully got chatters from API");
                     KeyQuestion = new WebClient().DownloadString(DlLink);
-                    ProjectT.CurrentViewers.Clear();
+
                     List<Viewer> tempviewers = new List<Viewer>();
                     Viewer temp = new Viewer();
                     //dynamic Userlist = JsonConvert.DeserializeObject(KeyQuestion);

@@ -12,5 +12,9 @@ namespace ProjectT
         {
             TwitchConfigs.LogDebug("Test-Overwrittenhandler got message");
         }
+        public override void onViewerListUpdate(List<Viewer> ListOfAllViewers)
+        {
+            TwitchConfigs.LogDebug("Test-Overwrittenhandler got BROADCAST");
+        }
     }
 }

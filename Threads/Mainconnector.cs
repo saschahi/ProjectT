@@ -7,6 +7,7 @@ using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Models;
 using System.Linq;
 using TwitchLib.Client.Events;
+using TwitchLib.Client.Enums;
 
 namespace ProjectT
 {
@@ -72,12 +73,6 @@ namespace ProjectT
                 Client.Connect();
             }
 
-            if (ThreadWorker.sendDebugMSG)
-            {
-                ThreadWorker.sendDebugMSG = false;
-                Client.SendMessage(Client.JoinedChannels.First(), "This is a test message");
-            }
-
             if (MessageQueue.messageQueue.Count > 0)
             {
                 MessageQueue.messageQueue.TryDequeue(out string messageToSend);
@@ -91,6 +86,11 @@ namespace ProjectT
                 TwitchConfigs.LogDebug("trying to send whisper: \"" + message + "\" to " + receiver);
                 Client.SendWhisper(receiver, message);
             }
+            if(LogQueue.toLog.Count > 0)
+            {
+                LogQueue.toLog.TryDequeue(out string result);
+                TwitchConfigs.writeDebug(result);
+            }
             if (ThreadWorker.runThread)
                 goto wait;
             TwitchConfigs.LogDebug("Thread is ending");
@@ -103,24 +103,24 @@ namespace ProjectT
 
         private void OnRitualNewChatter(object sender, OnRitualNewChatterArgs e)
         {
-            TwitchConfigs.LogDebug("New Chatter: " + e.RitualNewChatter.DisplayName);
+            TwitchConfigs.LogDebug("New RitualChatter: " + e.RitualNewChatter.DisplayName);
         }
 
         private void OnReSubscriber(object sender, OnReSubscriberArgs e)
         {
-            if(ViewerController.doesViewerExistbyID(e.ReSubscriber.UserId))
+            string tier = e.ReSubscriber.SubscriptionPlan.ToString();
+
+            if (ViewerController.doesViewerExistbyID(e.ReSubscriber.UserId))
             {
                 Viewer viewer = ViewerController.getViewerFromUserID(e.ReSubscriber.UserId);
                 ViewerController.UpdateLastSeen(viewer);
-                BroadcastHandler.BroadcastonReSubscriber(viewer);
+                BroadcastHandler.BroadcastonReSubscriber(viewer, tier);
             }
             else
             {
                 Viewer temp = ViewerController.AddNewUser(e.ReSubscriber.DisplayName, e.ReSubscriber.UserId);
 
-
-                
-                BroadcastHandler.BroadcastonReSubscriber(ViewerController.getViewerFromUserID(e.ReSubscriber.UserId));
+                BroadcastHandler.BroadcastonReSubscriber(ViewerController.getViewerFromUserID(e.ReSubscriber.UserId), tier);
             }
             TwitchConfigs.LogDebug("Got a Resubscriber: " + e.ReSubscriber.DisplayName + ", Subscription Plan: " + e.ReSubscriber.SubscriptionPlanName);
         }
@@ -132,16 +132,17 @@ namespace ProjectT
 
         private void OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
+            string tier = e.Subscriber.SubscriptionPlan.ToString();
             if (ViewerController.doesViewerExistbyID(e.Subscriber.UserId))
             {
                 Viewer viewer = ViewerController.getViewerFromUserID(e.Subscriber.UserId);
                 ViewerController.UpdateLastSeen(viewer);
-                BroadcastHandler.BroadcastonNewSubscriber(viewer);
+                BroadcastHandler.BroadcastonNewSubscriber(viewer, tier);
             }
             else
             {
                 ViewerController.AddNewUser(e.Subscriber.DisplayName, e.Subscriber.UserId);
-                BroadcastHandler.BroadcastonReSubscriber(ViewerController.getViewerFromUserID(e.Subscriber.UserId));
+                BroadcastHandler.BroadcastonNewSubscriber(ViewerController.getViewerFromUserID(e.Subscriber.UserId), tier);
             }
             TwitchConfigs.LogDebug("New Subscriber: " + e.Subscriber.DisplayName);
         }
@@ -154,29 +155,23 @@ namespace ProjectT
 
         private void OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
         {
-            if (ViewerController.doesViewerExistbyID(e.GiftedSubscription.UserId))
+            string tier = e.GiftedSubscription.MsgParamSubPlan.ToString();
+            if (!ViewerController.doesViewerExistbyID(e.GiftedSubscription.MsgParamRecipientId))
             {
-                BroadcastHandler.BroadcastonGiftedSubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
+                ViewerController.AddNewUser(e.GiftedSubscription.MsgParamRecipientUserName, e.GiftedSubscription.MsgParamRecipientId);
             }
-            else
-            {
-                ViewerController.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);
-                BroadcastHandler.BroadcastonGiftedSubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
-            }
-            TwitchConfigs.LogDebug("Got Gifted Subscription: " + e.GiftedSubscription.DisplayName);
+            BroadcastHandler.BroadcastonGiftedSubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.MsgParamRecipientId), tier);
+            TwitchConfigs.LogDebug("Got Gifted Subscription for: " + e.GiftedSubscription.MsgParamRecipientDisplayName);
         }
 
         private void OnCommunitySubscription(object sender, OnCommunitySubscriptionArgs e)
         {
-            if (ViewerController.doesViewerExistbyID(e.GiftedSubscription.UserId))
-            {
-                BroadcastHandler.BroadcastonCommunitySubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
-            }
-            else
+            string tier = e.GiftedSubscription.MsgParamSubPlan.ToString();
+            if (!ViewerController.doesViewerExistbyID(e.GiftedSubscription.UserId))
             {
                 ViewerController.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);
-                BroadcastHandler.BroadcastonCommunitySubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId));
             }
+            BroadcastHandler.BroadcastonCommunitySubscription(ViewerController.getViewerFromUserID(e.GiftedSubscription.UserId), tier);
             TwitchConfigs.LogDebug("Got Community Subscription: " + e.GiftedSubscription.DisplayName);
         }
 
@@ -197,7 +192,10 @@ namespace ProjectT
         private void OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
             TwitchConfigs.LogDebug($"The bot {e.BotUsername} just joined the channel: {e.Channel}");
-            MessageQueue.messageQueue.Enqueue("TProject Succesfully started");
+            if (TwitchConfigs.Karl.EnableChatDebugmessage)
+            {
+                MessageQueue.messageQueue.Enqueue("TProject Succesfully started");
+            }
             
         }
 
@@ -222,14 +220,11 @@ namespace ProjectT
                     }
                 }
                 ViewerController.UpdateLastSeen(viewer);
-                BroadcastHandler.BroadcastTwitchMessage(viewer, e.ChatMessage.Message, e.ChatMessage.Bits);
             }
             else
             {
                 ViewerController.AddNewUser(e.ChatMessage.DisplayName, e.ChatMessage.UserId);
-                BroadcastHandler.BroadcastTwitchMessage(ViewerController.getViewerFromUserID(e.ChatMessage.UserId), e.ChatMessage.Message, e.ChatMessage.Bits);
             }
-
 
             TwitchConfigs.LogDebug("Received Message: " + e.ChatMessage.Username + ": " + e.ChatMessage.Message);
             BaseMessageHandler(ViewerController.getViewerFromUserID(e.ChatMessage.UserId), e.ChatMessage.Message, e.ChatMessage.Bits);
@@ -283,12 +278,27 @@ namespace ProjectT
             //Broadcastercommands
             if (viewer.Name.Equals(Authdata.broadcastername))
             {
-                if (message.StartsWith("!givecoins"))
+                if (message.StartsWith("!givecoins "))
                 {
-                    string v1 = message.Remove(0, 11);
-                    string v2 = new string(v1.TakeWhile(char.IsLetterOrDigit).ToArray());
-                    string v3 = v1.Remove(0, v2.Length + 1);
-                    string v4 = new string(v3.TakeWhile(char.IsDigit).ToArray());
+                    string v1 = null;
+                    string v2 = null;
+                    string v3 = null;
+                    string v4 = null;
+                    //to give a 1 letter name 1 coin you need 14 letters minimum.
+                    if (message.Length > 13)
+                    {
+                        v1 = message.Remove(0, 11);
+                        v2 = new string(v1.TakeWhile(char.IsLetterOrDigit).ToArray());
+                        if (v2.Length + 12 < message.Length)
+                        {
+                            string test = v1.Remove(0, v2.Length + 1);
+                            if (test != " ")
+                            {
+                                v3 = v1.Remove(0, v2.Length + 1);
+                                v4 = new string(v3.TakeWhile(char.IsDigit).ToArray());
+                            }
+                        }
+                    }
                     if (v2 != null && v4 != null)
                     {
                         if (ViewerController.doesViewerExistbyName(v2))
@@ -327,67 +337,9 @@ namespace ProjectT
         {
             List<Viewer> temp = new List<Viewer>();
 
+            //TODO
+
             return temp;
         }
-
-        /*
-        static private void RunChatBot()
-        {
-            // Initialize and connect to Twitch chat
-            irc = new IrcClient("irc.twitch.tv", 6667, Authdata.botname, Authdata.twitchoauth, Authdata.broadcastername);
-
-            // Ping to the server to make sure this bot stays connected to the chat
-            // Server will respond back to this bot with a PONG (without quotes):
-            // Example: ":tmi.twitch.tv PONG tmi.twitch.tv :irc.twitch.tv"
-            PingSender ping = new PingSender(irc);
-            ping.Start();
-            irc.SendPublicChatMessage("Project-T Successfully Connected");
-            // Listen to the chat until program exits
-            while (true)
-            {
-                // Read any message from the chat room
-                string message = irc.ReadMessage();
-                //Console.WriteLine(message); // Print raw irc messages
-
-                
-
-                if (message.Contains("PRIVMSG"))
-                {
-                    // Messages from the users will look something like this (without quotes):
-                    // Format: ":[user]![user]@[user].tmi.twitch.tv PRIVMSG #[channel] :[message]"
-
-                    // Modify message to only retrieve user and message
-                    int intIndexParseSign = message.IndexOf('!');
-                    string userName = message.Substring(1, intIndexParseSign - 1); // parse username from specific section (without quotes)
-                                                                                   // Format: ":[user]!"
-                                                                                   // Get user's message
-                    intIndexParseSign = message.IndexOf(" :");
-                    message = message.Substring(intIndexParseSign + 2);
-
-                    //just a little failsafe
-                    if (!Currentviewers.Contains(userName))
-                    {
-                        Currentviewers.Add(userName);
-                    }
-                    bool found = false;
-                    Viewer Messagesender = new Viewer();
-                    foreach (var item in Allviewers)
-                    {
-                        if (item.Name == userName)
-                        {
-                            Messagesender = item;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found)
-                    {
-                        Messagesender = AddNewUser(userName);
-                    }
-                    BaseMessageHandler(Messagesender, message);
-                }
-            }
-        }
-        */
     }
 }

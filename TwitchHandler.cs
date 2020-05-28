@@ -17,15 +17,15 @@ namespace ProjectT
 
         public virtual void onConnectionError() { }
 
-        public virtual void onReSubscriber(Viewer viewer) { }
+        public virtual void onReSubscriber(Viewer viewer, string tier) { }
         
-        public virtual void onNewSubscriber(Viewer viewer) { }
+        public virtual void onNewSubscriber(Viewer viewer, string tier) { }
 
         public virtual void onIncorrectLogin() { }
 
-        public virtual void onGiftedSubscription(Viewer viewer) { }
+        public virtual void onGiftedSubscription(Viewer viewer, string tier) { }
 
-        public virtual void onCommunitySubscription(Viewer viewer) { }
+        public virtual void onCommunitySubscription(Viewer viewer, string tier) { }
 
         public virtual void onBeingHosted(string Host, int Menge) { }
 
