@@ -43,12 +43,10 @@ namespace ProjectT
         public override void OnChanged()
         {
             TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
-            ProjectT.updateConfig();            
         }
         public override void OnLoaded()
         {
             TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
-
         }
     }
 }

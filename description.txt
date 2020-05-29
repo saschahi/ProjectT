@@ -2,6 +2,11 @@ Project-T is a public Twitch Library for all to use.
 
 It handles a connection to Twitch and catches events such as Messages, Whispers, Bits, Subscriptions etc. and lets modders hook into these to create Fun Gameplay elements.
 
+To find Addons for this for this Mod to give it functionality, either:
+Search for Project-T in the Mod Browser
+or
+Come to our Discord (Discord.gg/7t93dpx)
+
 Possible examples:
 - Spawn 1 Zombie/Slime/whatever for every bit someone sends through the chat
 - Activate a random Teleportation effect for every new subscriber
@@ -15,7 +20,12 @@ Project-T itself does not bring these Features. Project-T brings:
 - An inbuilt Currency system for your Viewers to amass coins and for other mods to use
 - Hooks for Events that other mods can listen to
 - an easy way to send Messages to your Twitch chat for other mods
-- Viewernames, IDs and Currencies are saved Locally and don't get lost if you close the game
+- Viewernames, IDs and Coins are saved Locally and don't get lost if you close the game
 
-This mod can be used in Multiplayer and Singleplayer. 
+This library can be used in Multiplayer and Singleplayer. 
+
+The basemod adds the folowing Commands:
+!bal - check your coin-balance
+!givecoins *Name* *Amount* - (Streamer only) Give a specific Viewer Coins
+!info - Link to the Support Discord
 

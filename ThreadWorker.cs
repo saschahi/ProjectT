@@ -12,8 +12,6 @@ namespace ProjectT
     {
         public static bool runThread = true;
         public static bool stayConnected = true;
-        public static bool sendDebugMSG = false;
-        public static bool complete;
         private static Authdata tlogin;
         static List<Thread> threads = new List<Thread>();
 
@@ -84,25 +82,6 @@ namespace ProjectT
                 TwitchConfigs.LogDebug("found one or multiple unknown characters in bot or broadcastername");
             }
 
-
-
-            /*
-            if (!runThread) return;
-
-
-            tlogin = TwitchConfigs.GetAuthdata();
-
-            Thread clientThread = new Thread((wrapper) => new Mainconnector().Initialize(new ConnectionCredentials(tlogin.botname, tlogin.twitchoauth)))
-            {
-                Name = "Client BG Worker",
-                IsBackground = true
-            };
-            if (!new Regex("^([a-zA-Z0-9][a-zA-Z0-9_]{3,25})$").Match(tlogin.botname).Success)
-            {
-                return false;
-            }
-            clientThread.Start();
-            */
         }
     }
 }

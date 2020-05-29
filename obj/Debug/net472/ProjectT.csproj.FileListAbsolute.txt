@@ -19,7 +19,6 @@ G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\n
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TerrariaHooks.dll
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\tModLoader.exe
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TwitchLib.Client.dll
-G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TwitchLib.Client.Enums.dll
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TwitchLib.Client.Models.dll
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TwitchLib.Communication.dll
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\tModLoader.pdb

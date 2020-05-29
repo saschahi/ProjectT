@@ -124,7 +124,7 @@ namespace ProjectT
                             //no UserID to work with here... maybe add something later.
                         }
                     }
-                    TwitchConfigs.LogDebug("Sending all known chatters to integrate to Allviewers List");
+                    TwitchConfigs.LogDebug("Sending" + tempviewers.Count + " chatters to integrate to Allviewers List");
                     ViewerController.UpdateChatter(tempviewers);
                 }
                 catch

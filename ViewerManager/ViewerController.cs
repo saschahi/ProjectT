@@ -13,17 +13,7 @@ namespace ProjectT
 		//I don't need currentviewers.
 		//I have last_seen
 
-		public static Viewer getViewerFromDisplayname(string Displayname)
-		{
-			foreach (var item in AllViewers)
-			{
-				if (item.Name == Displayname)
-				{
-					return item;
-				}
-			}
-			return null;
-		}
+
 		public static Viewer getViewerFromUserID(string UserID)
 		{
 			foreach (var item in AllViewers)
@@ -58,6 +48,17 @@ namespace ProjectT
 				}
 			}
 			return false;
+		}
+		public static Viewer getViewerFromDisplayname(string Displayname)
+		{
+			foreach (var item in AllViewers)
+			{
+				if (item.Name == Displayname)
+				{
+					return item;
+				}
+			}
+			return null;
 		}
 
 		public static bool doesViewerExistbyViewer(Viewer viewer)
@@ -131,10 +132,8 @@ namespace ProjectT
 		public static void UpdateLastSeen(Viewer viewer)
 		{
 			int index = AllViewers.FindIndex((i) => i.Name == viewer.Name && i.UserID == viewer.UserID);
-
 			AllViewers[index].last_seen = DateTime.UtcNow;
-		    
-			UpdateViewerList();
+		    UpdateViewerList();
 		}
 
 		public static void UpdateChatter(List<Viewer> chatters)
@@ -145,7 +144,6 @@ namespace ProjectT
 				{
 					Viewer basic = getViewerFromUserID(item.UserID);
 					int index = AllViewers.FindIndex((i) => i.Name == basic.Name && i.UserID == basic.UserID);
-					//int index = AllViewers.IndexOf(basic);
 					AllViewers[index].vip = item.vip;
 					AllViewers[index].mod = item.mod;
 					AllViewers[index].last_seen = item.last_seen;

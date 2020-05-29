@@ -50,7 +50,7 @@ namespace ProjectT
         //Returns "true" if the config file was found and successfully loaded.
         private static bool TestAuthConfig()
         {
-            if (AuthConfig.Load())
+            if (File.Exists(Twitchsetup))
             {
                 return true;
             }
@@ -59,7 +59,7 @@ namespace ProjectT
 
         private static bool TestListConfig()
         {
-            if (ListConfig.Load())
+            if (File.Exists(Userconfigpath))
             {
                 return true;
             }
@@ -101,8 +101,6 @@ namespace ProjectT
             test.Close();
             LogDebug("Debuglog created");*/
         }
-
-        
 
         static public void CreateListConfig()
         {
@@ -165,7 +163,6 @@ namespace ProjectT
 
         public static void writeDebug(string text)
         {
-            
             if (Karl == null)
             {
                 Karl = ModContent.GetInstance<ProjectTconfig>();

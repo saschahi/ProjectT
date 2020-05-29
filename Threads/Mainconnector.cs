@@ -7,7 +7,6 @@ using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Models;
 using System.Linq;
 using TwitchLib.Client.Events;
-using TwitchLib.Client.Enums;
 
 namespace ProjectT
 {
@@ -21,7 +20,7 @@ namespace ProjectT
         {
             BroadcastHandler.setupHandler();
             Authdata = TwitchConfigs.GetAuthdata();
-
+            ProjectT.BotActivated = true;
             var clientOptions = new ClientOptions
             {
                 MessagesAllowedInPeriod = 750,
@@ -59,12 +58,10 @@ namespace ProjectT
 
 
             Client.Connect();
-            
             AutoResetEvent eventHandler = new AutoResetEvent(false);
 
             wait: eventHandler.WaitOne(250);
-
-            if (ThreadWorker.stayConnected == false && Client.IsConnected)
+            if (!ThreadWorker.stayConnected && Client.IsConnected)
             {
                 Client.Disconnect();
             }
@@ -77,7 +74,7 @@ namespace ProjectT
             {
                 MessageQueue.messageQueue.TryDequeue(out string messageToSend);
                 TwitchConfigs.LogDebug("trying to send message " + messageToSend);
-                Client.SendMessage(Client.JoinedChannels.First(), messageToSend);
+                Client.SendMessage(Client.JoinedChannels[0], messageToSend);
             }
             if(WhisperQueue.WhispersQueueName.Count > 0 && WhisperQueue.WhispersQueueMessage.Count == WhisperQueue.WhispersQueueName.Count)
             {
@@ -91,9 +88,14 @@ namespace ProjectT
                 LogQueue.toLog.TryDequeue(out string result);
                 TwitchConfigs.writeDebug(result);
             }
+            if(TwitchConfigs.Karl != null)
+            {
+                ThreadWorker.stayConnected = TwitchConfigs.Karl.EnableMod;
+            }
             if (ThreadWorker.runThread)
                 goto wait;
             TwitchConfigs.LogDebug("Thread is ending");
+            ProjectT.BotActivated = false;
         }
 
         private void OnVIPsReceived(object sender, OnVIPsReceivedArgs e)
@@ -108,7 +110,7 @@ namespace ProjectT
 
         private void OnReSubscriber(object sender, OnReSubscriberArgs e)
         {
-            string tier = e.ReSubscriber.SubscriptionPlan.ToString();
+            string tier = e.ReSubscriber.SubscriptionPlan;
 
             if (ViewerController.doesViewerExistbyID(e.ReSubscriber.UserId))
             {
@@ -132,7 +134,7 @@ namespace ProjectT
 
         private void OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
-            string tier = e.Subscriber.SubscriptionPlan.ToString();
+            string tier = e.Subscriber.SubscriptionPlan;
             if (ViewerController.doesViewerExistbyID(e.Subscriber.UserId))
             {
                 Viewer viewer = ViewerController.getViewerFromUserID(e.Subscriber.UserId);
@@ -155,7 +157,7 @@ namespace ProjectT
 
         private void OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
         {
-            string tier = e.GiftedSubscription.MsgParamSubPlan.ToString();
+            string tier = e.GiftedSubscription.MsgParamSubPlan;
             if (!ViewerController.doesViewerExistbyID(e.GiftedSubscription.MsgParamRecipientId))
             {
                 ViewerController.AddNewUser(e.GiftedSubscription.MsgParamRecipientUserName, e.GiftedSubscription.MsgParamRecipientId);
@@ -166,7 +168,7 @@ namespace ProjectT
 
         private void OnCommunitySubscription(object sender, OnCommunitySubscriptionArgs e)
         {
-            string tier = e.GiftedSubscription.MsgParamSubPlan.ToString();
+            string tier = e.GiftedSubscription.MsgParamSubPlan;
             if (!ViewerController.doesViewerExistbyID(e.GiftedSubscription.UserId))
             {
                 ViewerController.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);
@@ -270,7 +272,7 @@ namespace ProjectT
             {
                 if (message.Equals("!creator"))
                 {
-                    MessageQueue.messageQueue.Enqueue("Yes, saschahi is the creator of T-Project");
+                    MessageQueue.messageQueue.Enqueue("Yes, saschahi is the creator of Project-T");
                     return;
                 }
             }

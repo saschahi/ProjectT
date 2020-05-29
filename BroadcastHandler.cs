@@ -172,7 +172,7 @@ namespace ProjectT
 
 			foreach (var item in allsubclasses)
 			{
-				var info = item.GetMethod("onBeingHosted", new Type[] { typeof(Viewer), typeof(int) });
+				var info = item.GetMethod("onBeingHosted", new Type[] { typeof(string), typeof(int) });
 				if (info == null)
 				{
 					TwitchConfigs.LogDebug("NEW didn't find Method onBeingHosted in " + item.Namespace + " in " + item.Name);

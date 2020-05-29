@@ -1,6 +1,7 @@
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using System;
+using IL.Terraria;
 
 namespace ProjectT
 {
@@ -12,18 +13,21 @@ namespace ProjectT
 
 		public ProjectT()
 		{
-			//test
+			//banana
 		}
 
 		public override void Load()
 		{
 			TwitchConfigs.Load();
-			TwitchConfigs.LogDebug("Loading the Mod");
+			TwitchConfigs.LogDebug("Loading Project-T");
 			ViewerController.AllViewers = TwitchConfigs.getListConfig();
+			TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
 		}
 		public override void Unload()
 		{
 			ViewerController.UpdateViewerList();
+			//TwitchConfigs.Karl = null;
+			
 			stopBot();
 		}
 
@@ -34,39 +38,18 @@ namespace ProjectT
 
 		public static void startBot()
 		{
-			//start the bot somehow
 			ThreadWorker.runThread = true;
 			ThreadWorker.StartThread();
-			BotActivated = true;
 		}
 
 		public static void stopBot()
 		{
 			ThreadWorker.runThread = false;
-			BotActivated = false;
 		}
 
-		public static void updateConfig()
+		public static void configUpdate(bool enabled)
 		{
-			//because the first time Karl is always null
-			try 
-			{
-				if (TwitchConfigs.Karl != null)
-				{
-					if (TwitchConfigs.Karl.EnableMod != ThreadWorker.runThread)
-					{
-						if (TwitchConfigs.Karl.EnableMod)
-						{
-							startBot();
-						}
-						else
-						{
-							stopBot();
-						}
-					}
-				}
-			}
-			catch { }
+
 		}
 
 		public void debugginglog(string message)
@@ -91,6 +74,7 @@ namespace ProjectT
 				else if (message == "AddCoins")
 				{
 					TwitchConfigs.LogDebug("Received Instruction from other Mod. Looking if user exists...");
+
 					if (ViewerController.doesViewerExistbyViewer(args[1] as Viewer))
 					{
 						TwitchConfigs.LogDebug("Confirmed that user exists. Adding coins to Viewer");
@@ -106,7 +90,7 @@ namespace ProjectT
 				else if (message == "RemoveCoins")
 				{
 					TwitchConfigs.LogDebug("Received Instruction from other Mod. Looking if user exists...");
-					if(ViewerController.doesViewerExistbyViewer(args[1] as Viewer))
+					if (ViewerController.doesViewerExistbyViewer(args[1] as Viewer))
 					{
 						TwitchConfigs.LogDebug("Confirmed that user exists. attempting to remove coins from user...");
 						return ViewerController.RemoveCoins(args[1] as Viewer, Convert.ToDouble(args[2] as string));
@@ -122,7 +106,7 @@ namespace ProjectT
 				}
 				else
 				{
-					TwitchConfigs.LogDebug("Call Error: Unknown Message: " + message);
+					TwitchConfigs.LogDebug("Call Error: Unknown Call Type: " + message);
 				}
 			}
 			catch (Exception e)
