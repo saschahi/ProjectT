@@ -27,7 +27,7 @@ namespace ProjectT
         static Preferences ListConfig = new Preferences(Userconfigpath);
         static Preferences DebugConfig = new Preferences(Debuglog);
 
-        public static ProjectTconfig Karl = new ProjectTconfig();
+        public static ProjectTconfig Karl { get; set; } = new ProjectTconfig();
 
         public static void Load()
         {

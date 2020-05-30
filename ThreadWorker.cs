@@ -10,7 +10,7 @@ namespace ProjectT
 {
     public static class ThreadWorker
     {
-        public static bool runThread = true;
+        public static bool runThread { get; set; } = true;
         public static bool stayConnected = true;
         private static Authdata tlogin;
         static List<Thread> threads = new List<Thread>();
@@ -21,9 +21,10 @@ namespace ProjectT
             {
                 TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
             }
-            runThread = TwitchConfigs.Karl.EnableMod;
+            //runThread = TwitchConfigs.Karl.EnableMod;
 
             tlogin = TwitchConfigs.GetAuthdata();
+
 
             if (!runThread) return;
 

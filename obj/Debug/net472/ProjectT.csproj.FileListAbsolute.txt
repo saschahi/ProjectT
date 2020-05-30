@@ -33,3 +33,4 @@ G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\obj\Debug\n
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\obj\Debug\net472\ProjectT.dll
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\obj\Debug\net472\ProjectT.pdb
 G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\Newtonsoft.Json.dll
+G:\Sascha\Dokumente\My Games\Terraria\ModLoader\Mod Sources\ProjectT\bin\Debug\net472\TwitchLib.Client.Enums.dll

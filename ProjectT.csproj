@@ -20,6 +20,9 @@
     <Reference Include="TwitchLib.Client">
       <HintPath>lib\TwitchLib.Client.dll</HintPath>
     </Reference>
+    <Reference Include="TwitchLib.Client.Enums">
+      <HintPath>lib\TwitchLib.Client.Enums.dll</HintPath>
+    </Reference>
     <Reference Include="TwitchLib.Client.Models">
       <HintPath>lib\TwitchLib.Client.Models.dll</HintPath>
     </Reference>

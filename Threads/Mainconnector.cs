@@ -70,13 +70,13 @@ namespace ProjectT
                 Client.Connect();
             }
 
-            if (MessageQueue.messageQueue.Count > 0)
+            if (MessageQueue.messageQueue.Count > 0 && Client.IsConnected)
             {
                 MessageQueue.messageQueue.TryDequeue(out string messageToSend);
                 TwitchConfigs.LogDebug("trying to send message " + messageToSend);
-                Client.SendMessage(Client.JoinedChannels[0], messageToSend);
+                Client.SendMessage(Client.JoinedChannels.First(), messageToSend);
             }
-            if(WhisperQueue.WhispersQueueName.Count > 0 && WhisperQueue.WhispersQueueMessage.Count == WhisperQueue.WhispersQueueName.Count)
+            if(WhisperQueue.WhispersQueueName.Count > 0 && WhisperQueue.WhispersQueueMessage.Count == WhisperQueue.WhispersQueueName.Count && Client.IsConnected)
             {
                 WhisperQueue.WhispersQueueName.TryDequeue(out string receiver);
                 WhisperQueue.WhispersQueueMessage.TryDequeue(out string message);
@@ -110,7 +110,7 @@ namespace ProjectT
 
         private void OnReSubscriber(object sender, OnReSubscriberArgs e)
         {
-            string tier = e.ReSubscriber.SubscriptionPlan;
+            string tier = e.ReSubscriber.SubscriptionPlan.ToString();
 
             if (ViewerController.doesViewerExistbyID(e.ReSubscriber.UserId))
             {
@@ -134,7 +134,7 @@ namespace ProjectT
 
         private void OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
-            string tier = e.Subscriber.SubscriptionPlan;
+            string tier = e.Subscriber.SubscriptionPlan.ToString();
             if (ViewerController.doesViewerExistbyID(e.Subscriber.UserId))
             {
                 Viewer viewer = ViewerController.getViewerFromUserID(e.Subscriber.UserId);
@@ -157,7 +157,7 @@ namespace ProjectT
 
         private void OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
         {
-            string tier = e.GiftedSubscription.MsgParamSubPlan;
+            string tier = e.GiftedSubscription.MsgParamSubPlan.ToString();
             if (!ViewerController.doesViewerExistbyID(e.GiftedSubscription.MsgParamRecipientId))
             {
                 ViewerController.AddNewUser(e.GiftedSubscription.MsgParamRecipientUserName, e.GiftedSubscription.MsgParamRecipientId);
@@ -168,7 +168,7 @@ namespace ProjectT
 
         private void OnCommunitySubscription(object sender, OnCommunitySubscriptionArgs e)
         {
-            string tier = e.GiftedSubscription.MsgParamSubPlan;
+            string tier = e.GiftedSubscription.MsgParamSubPlan.ToString();
             if (!ViewerController.doesViewerExistbyID(e.GiftedSubscription.UserId))
             {
                 ViewerController.AddNewUser(e.GiftedSubscription.DisplayName, e.GiftedSubscription.UserId);

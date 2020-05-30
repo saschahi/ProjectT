@@ -1,7 +1,6 @@
 using Terraria.ModLoader;
 using System.Collections.Generic;
 using System;
-using IL.Terraria;
 
 namespace ProjectT
 {
