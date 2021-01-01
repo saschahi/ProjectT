@@ -49,4 +49,22 @@ namespace ProjectT
             TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
         }
     }
+    class ProjectTServerconfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ServerSide;
+
+        [Label("Activate Server-side connecting to Twitch")]
+        [Tooltip("This Setting does nothing if you aren't on a Server. Should always be off except an Addon requires this.")]
+        [DefaultValue(false)]
+        public bool ActivateServerConnection { get; set; } = new bool();
+
+        public override void OnChanged()
+        {
+            
+        }
+        public override void OnLoaded()
+        {
+            
+        }
+    }
 }

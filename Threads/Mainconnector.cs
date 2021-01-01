@@ -7,14 +7,17 @@ using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Models;
 using System.Linq;
 using TwitchLib.Client.Events;
+using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace ProjectT
 {
     public class Mainconnector
     {
-
-        public static TwitchClient Client { get; private set; }
-        private static Authdata Authdata = new Authdata();
+        private TwitchClient Client { get; set; }
+        private Authdata Authdata = new Authdata();
+        private bool isServerAllowed = false;
+        private ProjectTServerconfig SConfig = new ProjectTServerconfig();
 
         public void Initialize(ConnectionCredentials credentials)
         {
@@ -34,6 +37,12 @@ namespace ProjectT
                 Client = new TwitchClient(customClient);
             }
             
+            if(Terraria.Main.dedServ && !isServerAllowed || Terraria.Main.netMode == NetmodeID.Server && !isServerAllowed)
+            {
+                TwitchConfigs.LogDebug("Thread is ending");
+                ProjectT.BotActivated = false;
+                return;
+            }
 
             // Initialize the client with the credentials instance, and setting a default channel to connect to.
             Client.Initialize(credentials, Authdata.broadcastername);
@@ -61,13 +70,29 @@ namespace ProjectT
             AutoResetEvent eventHandler = new AutoResetEvent(false);
 
             wait: eventHandler.WaitOne(250);
+            if (SConfig == null)
+            {
+                SConfig = ModContent.GetInstance<ProjectTServerconfig>();
+                try
+                {
+                    isServerAllowed = SConfig.ActivateServerConnection;
+                }
+                catch { }
+            }
             if (!ThreadWorker.stayConnected && Client.IsConnected)
             {
                 Client.Disconnect();
             }
             else if (ThreadWorker.stayConnected == true && !Client.IsConnected)
             {
-                Client.Connect();
+                if (!Terraria.Main.dedServ && ProjectT.currentnetmode != NetmodeID.Server)
+                {
+                    Client.Connect();
+                }
+                else if(isServerAllowed)
+                {
+                    Client.Connect();
+                }
             }
 
             if (MessageQueue.messageQueue.Count > 0 && Client.IsConnected)
@@ -265,7 +290,7 @@ namespace ProjectT
             TwitchConfigs.LogDebug($"The bot got a whisper: {e.WhisperMessage.Message}" +  " from " + e.WhisperMessage.DisplayName);
         }
 
-        private static void BaseMessageHandler(Viewer viewer, string message, int bits)
+        private void BaseMessageHandler(Viewer viewer, string message, int bits)
         {
             //shameless plug
             if (viewer.Name.Equals("saschahi"))
@@ -314,6 +339,28 @@ namespace ProjectT
                             catch { }
                             return;
                         }
+                    }
+                    return;
+                }
+
+                else if(message.StartsWith("!giveallcoins "))
+                {
+                    string v1 = null;
+                    string v2 = null;
+                    if (message.Length > 15)
+                    {
+                        v1 = message.Remove(0, 14);
+                        v2 = new string(v1.TakeWhile(char.IsLetterOrDigit).ToArray());
+                        
+                    }
+                    if(v2 != null)
+                    {
+                        try
+                        {
+                            ViewerController.AddCoinsToAll(Convert.ToDouble(v2));
+                            MessageQueue.messageQueue.Enqueue("Added " + v2.ToString() + " coins to all current Viewers");
+                        }
+                        catch { }
                     }
                     return;
                 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Terraria;
 using Terraria.ModLoader;
 using TwitchLib.Client.Models;
 
@@ -43,44 +42,62 @@ namespace ProjectT
             }
 
             //if (ToolkitCoreSettings.connectOnGameStartup) stayConnected = true;
-
-            if (new Regex("^([a-zA-Z0-9][a-zA-Z0-9_]{3,25})$").Match(tlogin.botname).Success && new Regex("^([a-zA-Z0-9][a-zA-Z0-9_]{3,25})$").Match(tlogin.broadcastername).Success)
+            if (tlogin.botname != null && tlogin.broadcastername != null)
             {
-                //starting mainthread
-                Thread clientThread = new Thread((wrapper) => new Mainconnector().Initialize(new ConnectionCredentials(tlogin.botname, tlogin.twitchoauth)))
+                if(tlogin.botname == null)
                 {
-                    Name = "Project-T Twitch Connector",
-                    IsBackground = true
-                };
-
-                threads.Add(clientThread);
-
-                clientThread.Start();
-
-                if (threads.Count > 1)
+                    tlogin.botname = tlogin.broadcastername;
+                    TwitchConfigs.LogDebug("No Botname Detected, setting it to Broadcastername");
+                }
+                if(tlogin.broadcastername == null)
                 {
-                    TwitchConfigs.LogDebug("Multiple threads found, report to ProjectT Author and restart game if any issues arise.");
+                    tlogin.broadcastername = tlogin.botname;
+                    TwitchConfigs.LogDebug("No Broadcastername Detected, setting it to Botname");
+
                 }
 
-                //starting ListBotThread
-                Thread chatterthread = new Thread((wrapper) => new ChatterGetter().RunListBot(tlogin.broadcastername))
+                if (new Regex("^([a-zA-Z0-9][a-zA-Z0-9_]{3,25})$").Match(tlogin.botname).Success && new Regex("^([a-zA-Z0-9][a-zA-Z0-9_]{3,25})$").Match(tlogin.broadcastername).Success)
                 {
-                    Name = "Project-T Chatter API Connector",
-                    IsBackground = true
-                };
+                    //starting mainthread
+                    Thread clientThread = new Thread((wrapper) => new Mainconnector().Initialize(new ConnectionCredentials(tlogin.botname, tlogin.twitchoauth)))
+                    {
+                        Name = "Project-T Twitch Connector",
+                        IsBackground = true
+                    };
 
-                threads.Add(chatterthread);
+                    threads.Add(clientThread);
 
-                chatterthread.Start();
+                    clientThread.Start();
 
-                if (threads.Count > 2)
+                    if (threads.Count > 1)
+                    {
+                        TwitchConfigs.LogDebug("Multiple threads found, report to ProjectT Author and restart game if any issues arise.");
+                    }
+
+                    //starting ListBotThread
+                    Thread chatterthread = new Thread((wrapper) => new ChatterGetter().RunListBot(tlogin.broadcastername))
+                    {
+                        Name = "Project-T Chatter API Connector",
+                        IsBackground = true
+                    };
+
+                    threads.Add(chatterthread);
+
+                    chatterthread.Start();
+
+                    if (threads.Count > 2)
+                    {
+                        TwitchConfigs.LogDebug("Multiple threads found, report to ProjectT Author and restart game if any issues arise.");
+                    }
+                }
+                else
                 {
-                    TwitchConfigs.LogDebug("Multiple threads found, report to ProjectT Author and restart game if any issues arise.");
+                    TwitchConfigs.LogDebug("found one or multiple unknown characters in bot or broadcastername");
                 }
             }
             else
             {
-                TwitchConfigs.LogDebug("found one or multiple unknown characters in bot or broadcastername");
+                TwitchConfigs.LogDebug("Error, no Broadcaster and Botname detected");
             }
 
         }

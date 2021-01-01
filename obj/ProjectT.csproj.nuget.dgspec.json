@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj": {}
+    "E:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj": {}
   },
   "projects": {
-    "G:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj": {
+    "E:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj",
+        "projectUniqueName": "E:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj",
         "projectName": "ProjectT",
-        "projectPath": "G:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj",
+        "projectPath": "E:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\ProjectT.csproj",
         "packagesPath": "C:\\Users\\Saschahi\\.nuget\\packages\\",
-        "outputPath": "G:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\obj\\",
+        "outputPath": "E:\\Sascha\\Dokumente\\My Games\\Terraria\\ModLoader\\Mod Sources\\ProjectT\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -46,7 +46,7 @@
               "version": "[0.1.*, )"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

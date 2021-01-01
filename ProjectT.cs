@@ -7,12 +7,12 @@ namespace ProjectT
 	public class ProjectT : Mod
 	{
 		public static bool BotActivated = false;
-		public static List<Viewer> CurrentViewers = new List<Viewer>();
-		public static double startingcoins = 0;
+		public static int currentnetmode = -1;
 
 		public ProjectT()
 		{
 			//banana
+			
 		}
 
 		public override void Load()
@@ -21,12 +21,14 @@ namespace ProjectT
 			TwitchConfigs.LogDebug("Loading Project-T");
 			ViewerController.AllViewers = TwitchConfigs.getListConfig();
 			TwitchConfigs.Karl = ModContent.GetInstance<ProjectTconfig>();
+
 		}
 		public override void Unload()
 		{
 			ViewerController.UpdateViewerList();
 			//TwitchConfigs.Karl = null;
-			
+			BotActivated = false;
+			currentnetmode = -1;
 			stopBot();
 		}
 

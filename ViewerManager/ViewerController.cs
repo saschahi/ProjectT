@@ -106,6 +106,30 @@ namespace ProjectT
 			TwitchConfigs.SaveListConfig(AllViewers);
 		}
 
+		public static void AddCoinsToAll(double coinstoadd)
+		{
+			List<Viewer> current = getCurrentViewers();
+
+			foreach(var item in current)
+			{
+				AddCoins(item, coinstoadd);
+			}
+		}
+
+		public static List<Viewer> getCurrentViewers()
+		{
+			List<Viewer> viewer = AllViewers;
+			List<Viewer> mem = new List<Viewer>();
+			foreach (var item in viewer)
+			{
+				if (item.last_seen.AddMinutes(15) > DateTime.UtcNow)
+				{
+					mem.Add(item);
+				}
+			}
+			return mem;
+		}
+
 		public static bool RemoveCoins(Viewer viewer, double coinstoremove)
 		{
 			int index = AllViewers.FindIndex((i) => i.Name == viewer.Name && i.UserID == viewer.UserID);
