@@ -42,7 +42,7 @@ namespace ProjectT
 		{
 			foreach (var item in AllViewers)
 			{
-				if (item.Name == name)
+				if (item.Name.ToLower() == name.ToLower())
 				{
 					return true;
 				}
@@ -53,7 +53,7 @@ namespace ProjectT
 		{
 			foreach (var item in AllViewers)
 			{
-				if (item.Name == Displayname)
+				if (item.Name.ToLower() == Displayname.ToLower())
 				{
 					return item;
 				}

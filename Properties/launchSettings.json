@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ProjectT": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "$(tMLPath)",
+      "workingDirectory": "$(TerrariaSteamPath)"
+    }
+  }
+}

@@ -305,6 +305,7 @@ namespace ProjectT
             //Broadcastercommands
             if (viewer.Name.Equals(Authdata.broadcastername))
             {
+
                 if (message.StartsWith("!givecoins "))
                 {
                     string v1 = null;
@@ -315,6 +316,10 @@ namespace ProjectT
                     if (message.Length > 13)
                     {
                         v1 = message.Remove(0, 11);
+                        if (v1.StartsWith("@"))
+                        {
+                            v1 = v1.Remove(0, 1);
+                        }
                         v2 = new string(v1.TakeWhile(char.IsLetterOrDigit).ToArray());
                         if (v2.Length + 12 < message.Length)
                         {
@@ -336,12 +341,16 @@ namespace ProjectT
                                 //CoinAddQueue.addToQueue(ViewerController.getViewerFromDisplayname(v2), Convert.ToDouble(v4));
                                 MessageQueue.messageQueue.Enqueue("Added " + v4 + " coins to " + v2 + "s account");
                             }
-                            catch { }
+                            catch
+                            {
+
+                            }
                             return;
                         }
                     }
                     return;
                 }
+
 
                 else if(message.StartsWith("!giveallcoins "))
                 {
