@@ -201,6 +201,10 @@ namespace ProjectT
 
 		static public void BroadcastTwitchMessage(Viewer viewer, string message, int bits)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[3];
 			parameters[0] = viewer;
 			parameters[1] = message;
@@ -223,6 +227,10 @@ namespace ProjectT
 
 		static public void BroadcastTwitchWhisper(Viewer viewer, string message)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[2];
 			parameters[0] = viewer;
 			parameters[1] = message;
@@ -244,6 +252,10 @@ namespace ProjectT
 
 		static public void BroadcastonConnected()
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[0];
 			int count = 0;
 			foreach (var item in allsubclasses)
@@ -263,6 +275,10 @@ namespace ProjectT
 
 		static public void BroadcastonDisconnected()
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[0];
 			int count = 0;
 			foreach (var item in allsubclasses)
@@ -282,6 +298,10 @@ namespace ProjectT
 
 		static public void BroadcastonConnectionError()
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[0];
 			int count = 0;
 			foreach (var item in allsubclasses)
@@ -301,6 +321,10 @@ namespace ProjectT
 
 		static public void BroadcastonReSubscriber(Viewer viewer, string tier)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[2];
 			parameters[0] = viewer;
 			parameters[1] = tier;
@@ -322,6 +346,10 @@ namespace ProjectT
 
 		static public void BroadcastonNewSubscriber(Viewer viewer, string tier)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[2];
 			parameters[0] = viewer;
 			parameters[1] = tier;
@@ -343,6 +371,10 @@ namespace ProjectT
 
 		static public void BroadcastonIncorrectLogin()
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[0];
 			int count = 0;
 			foreach (var item in allsubclasses)
@@ -362,6 +394,10 @@ namespace ProjectT
 
 		static public void BroadcastonGiftedSubscription(Viewer viewer, string tier)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[2];
 			parameters[0] = viewer;
 			parameters[1] = tier;
@@ -383,6 +419,10 @@ namespace ProjectT
 
 		static public void BroadcastonCommunitySubscription(Viewer viewer, string tier)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[2];
 			parameters[0] = viewer;
 			parameters[1] = tier;
@@ -403,6 +443,10 @@ namespace ProjectT
 		}
 		static public void BroadcastonBeingHosted(string beinghostedby, int anzahl)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			object[] parameters = new object[1];
 			parameters[0] = beinghostedby;
 			parameters[1] = anzahl;
@@ -424,6 +468,10 @@ namespace ProjectT
 
 		static public void BroadcastonViewerListUpdate(List<Viewer> ListOfAllViewers)
 		{
+			if (ProjectT.unloading)
+			{
+				return;
+			}
 			//TwitchConfigs.LogDebug("BROADCASTING");
 			object[] parameters = new object[1];
 			parameters[0] = ListOfAllViewers;

@@ -303,7 +303,7 @@ namespace ProjectT
             }
 
             //Broadcastercommands
-            if (viewer.Name.Equals(Authdata.broadcastername))
+            if (viewer.Name.ToLower().Equals(Authdata.broadcastername.ToLower()))
             {
 
                 if (message.StartsWith("!givecoins "))

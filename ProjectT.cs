@@ -8,7 +8,7 @@ namespace ProjectT
 	{
 		public static bool BotActivated = false;
 		public static int currentnetmode = -1;
-
+		public static bool unloading = true;
 		public ProjectT()
 		{
 			//banana
@@ -17,6 +17,7 @@ namespace ProjectT
 
 		public override void Load()
 		{
+			unloading = false;
 			TwitchConfigs.Load();
 			TwitchConfigs.LogDebug("Loading Project-T");
 			ViewerController.AllViewers = TwitchConfigs.getListConfig();
@@ -25,6 +26,7 @@ namespace ProjectT
 		}
 		public override void Unload()
 		{
+			unloading = true;
 			ViewerController.UpdateViewerList();
 			//TwitchConfigs.Karl = null;
 			BotActivated = false;
