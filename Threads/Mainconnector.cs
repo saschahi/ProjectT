@@ -351,6 +351,56 @@ namespace ProjectT
                     return;
                 }
 
+                if (message.StartsWith("!removecoins "))
+                {
+                    string v1 = null;
+                    string v2 = null;
+                    string v3 = null;
+                    string v4 = null;
+                    //to give a 1 letter name 1 coin you need 14 letters minimum.
+                    if (message.Length > 15)
+                    {
+                        v1 = message.Remove(0, 13);
+                        if (v1.StartsWith("@"))
+                        {
+                            v1 = v1.Remove(0, 1);
+                        }
+                        v2 = new string(v1.TakeWhile(char.IsLetterOrDigit).ToArray());
+                        if (v2.Length + 12 < message.Length)
+                        {
+                            string test = v1.Remove(0, v2.Length + 1);
+                            if (test != " ")
+                            {
+                                v3 = v1.Remove(0, v2.Length + 1);
+                                v4 = new string(v3.TakeWhile(char.IsDigit).ToArray());
+                            }
+                        }
+                    }
+                    if (v2 != null && v4 != null)
+                    {
+                        if (ViewerController.doesViewerExistbyName(v2))
+                        {
+                            try
+                            {
+                                if (ViewerController.RemoveCoins(ViewerController.getViewerFromDisplayname(v2), Convert.ToDouble(v4)))
+                                {
+                                    MessageQueue.messageQueue.Enqueue("removed " + v4 + " coins from " + v2 + "s account");
+                                }
+                                else
+                                {
+                                    MessageQueue.messageQueue.Enqueue("Couldn't remove Coins from " + v2 + "'s account. Either he has not enough coins or the account doesn't exist");
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                            return;
+                        }
+                    }
+                    return;
+                }
+
 
                 else if(message.StartsWith("!giveallcoins "))
                 {

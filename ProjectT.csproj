@@ -29,5 +29,8 @@
     <Reference Include="TwitchLib.Communication">
       <HintPath>lib\TwitchLib.Communication.dll</HintPath>
     </Reference>
+    <Reference Include="TwitchLib.PubSub">
+      <HintPath>lib\TwitchLib.PubSub.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
